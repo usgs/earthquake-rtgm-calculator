@@ -2,7 +2,7 @@ require.config({
 	baseUrl: 'js',
 	paths: {
 		'mvc': '/hazdev-webutils/src/mvc',
-		'util': '/hazdev-webutils/src/util',
+		'util': '/hazdev-webutils/src/util'
 	},
 	shim: {
 	}
