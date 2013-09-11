@@ -2,7 +2,7 @@ Risk-Targeted Ground Motion Calculator
 ======================================
 
 Web application for calculating risk targeted ground motions and risk
-coeffieicnts from hazard curves.
+coefficients from hazard curves.
 
 License
 -------
