@@ -10,6 +10,7 @@ class Frequency {
 	public function __construct ($scale) {
 		$this->scale = $scale;
 	}
+
 }
 
 ?>

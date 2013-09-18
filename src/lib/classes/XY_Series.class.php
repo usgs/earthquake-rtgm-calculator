@@ -5,8 +5,8 @@
  */ 
 class XY_Series {
 
-	public xs;
-	public xy;
+	public $xs;
+	public $ys;
 
 	public function __construct ($size=null) {
 		if ($size != null) {
@@ -14,6 +14,7 @@ class XY_Series {
 			$this->ys = array($size);
 		}
 	}
+
 }
 
 ?>
