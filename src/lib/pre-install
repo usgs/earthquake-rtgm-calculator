@@ -43,5 +43,4 @@ file_put_contents($APACHE_CONFIG_FILE, '
 		Allow from all
 	</Location>
 ');
-
-
+?>

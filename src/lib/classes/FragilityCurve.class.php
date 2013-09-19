@@ -11,9 +11,9 @@ class FragilityCurve {
 	public $median;
 
 	private $beta;
+	private $cdf=null;
 	private $model;
 	private $pdf=null;
-	private $cdf=null;
 
 	public function __construct ($rtgm, $model, $beta) {
 		$median = $rtgm / exp(RTGM_Util::norminv(self::FRAGILITY_AT_RTGM)
@@ -29,7 +29,7 @@ class FragilityCurve {
 			for ($i = 0; $i < $size; $i++) {
 				$this->pdf->xs[$i] = $this->model->xs[$i];
 				$this->pdf->ys[$i] = RTGM_Util::logNormalDensity(
-						$this->model->xs[$i], log($median), $beta);
+						$this->model->xs[$i], log($this->median), $this->beta);
 			}
 			return $this->pdf;
 		}
@@ -42,7 +42,7 @@ class FragilityCurve {
 			for ($i = 0; $i < $size; $i++) {
 				$this->cdf->xs[$i] = $this->model->xs[$i];
 				$this->cdf->ys[$i] = RTGM_Util::logNormalCumProb(
-						$this->model->xs[$i], log($median), $beta);
+						$this->model->xs[$i], log($this->median), $this->beta);
 			}
 			return $this->cdf;
 		}

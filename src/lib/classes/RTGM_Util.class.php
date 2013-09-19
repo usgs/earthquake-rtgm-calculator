@@ -8,6 +8,44 @@ class RTGM_Util {
 	const MAX_SEQ_LEN = 10001;
 
 	/**
+	 * Binary search function based on java's Arrays.binarySearch.
+	 *
+	 * Parameters:
+	 *   $a - The sort array.
+	 *   $key - The key to be searched for.
+	 *
+	 * Return:
+	 *    Index of the search key, if it is contained in the array within the
+	 *    specified range; otherwise, (-(insertion point) - 1). The insertion
+	 *    point is defined as the point at which the key would be inserted
+	 *    into the array: the index of the first element in the range greater
+	 *    than the key, or toIndex if all elements in the range are less
+	 *    than the specified key. Note that this guarantees that the return
+	 *    value will be >= 0 if and only if the key is found.
+	 */
+	public static function binary_search($a, $key) {
+		$low = 0;
+		$high = count($a) - 1;
+		if ($key < 0.01) {
+}
+		while ($low <= $high) {
+			$mid = intval(($high - $low) / 2) + $low;
+			$midVal = $a[$mid];
+
+			if ($midVal < $key) {
+				$low = $mid + 1;
+			}
+			else if ($midVal > $key) {
+ 				$high = $mid - 1;
+			}
+			else {
+				return $mid; // key found
+			}
+		}
+		return -($low + 1);
+	}
+
+	/**
 	 * Creates a sequence of values starting at {@code min} and ending at
 	 *
 	 * {@code max}, the log of which are evenly spaced.
@@ -107,7 +145,7 @@ class RTGM_Util {
 	 */
 	public static function findLogLogYArrays($xs, $ys, $x) {
 		$y = array();
-		for ($i = 0; $i > count($x); $i++) {
+		for ($i = 0; $i < count($x); $i++) {
 			$y[] = RTGM_Util::findLogLogY($xs, $ys, $x[$i]);
 		}
 		return $y;
@@ -141,10 +179,12 @@ class RTGM_Util {
 	}
 
 	public static function logNormalDensity ($x, $mean, $std) {
-		if ($x <= 0) return 0;
+		if ($x <= 0) {
+			return 0;
+		}
 		$x0 = log($x) - $mean;
 		$x1 = $x0 / $std;
-		return exp(-0.5 * $x1 * $x1) / ($std * sqrt(2.0 * MPI) * $x);
+		return exp(-0.5 * $x1 * $x1) / ($std * sqrt(2.0 * M_PI) * $x);
 	}
 
 	public static function logNormalCumProb ($x, $mean, $std) {
@@ -164,7 +204,7 @@ class RTGM_Util {
 	 * @return a reference to {@code data1}
 	 */
 	public static function multiply($data1, $data2) {
-		for ($i=0; $i < count($data1); $i++) {
+		for ($i = 0; $i < count($data1); $i++) {
 			$data1[$i] = $data1[$i] * $data2[$i];
 		}
 		return $data1;
@@ -191,9 +231,11 @@ class RTGM_Util {
 	}	
 
 	private static function dataIndex($data, $value) {
-		$i = array_search($value, $data);
+		$i = RTGM_Util::binary_search($data, $value);
 		// adjust index for low value (-1) and in-sequence insertion pt
-		$i = ($i == -1) ? 0 : ($i < 0) ? -$i - 2 : $i;
+		// Note: below works in java as expected but not in PHP
+//		$i = ($i == -1) ? 0 : ($i < 0) ? -$i - 2 : $i;
+		$i = ($i == -1) ? 0 : (($i < 0) ? -$i - 2 : $i);
 		// adjust hi index to next to last index
 		return ($i >= count($data) - 1) ? --$i : $i;
 	}
@@ -206,7 +248,7 @@ class RTGM_Util {
 	 */
 	public static function trapz ($xs, $ys) {
 		$sum = 0;
-		for ($i = 1; $i < count($xs.length); $i++) {
+		for ($i = 1; $i < count($xs); $i++) {
 			$sum = $sum + ($xs[$i] - $xs[$i-1]) * ($ys[$i] + $ys[$i-1]);
 		}
 		return $sum * 0.5;

@@ -57,7 +57,11 @@
 				8.553e-08,
 				1.315e-10);
 		$rtgm = new RTGM($xs, $ys, Frequency::SA_1P00, 0.8); 
-		print $rtgm->calculate();
+		$rtgm->calculate();
+		print json_encode($rtgm);
+//		print $rtgm->riskCoeff . "\n";
+//		print $rtgm->rtgmIters;
+//		print $rtgm->riskIters;
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
 	}

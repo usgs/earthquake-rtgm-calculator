@@ -13,4 +13,4 @@ $MOUNT_PATH = $CONFIG['MOUNT_PATH'];
 
 include_once $APP_DIR . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR .
 		'lib.inc.php';
-
+?>

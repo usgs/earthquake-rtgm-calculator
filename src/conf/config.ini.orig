@@ -1,2 +1,4 @@
-MOUNT_PATH='/absolute/url/path';
-MOUNT_DIR='/absolute/file_system/path';
+APP_DIR = /absolute/rtgm
+DATA_DIR = /absolute/rtgm
+MOUNT_PATH = /rtgm
+

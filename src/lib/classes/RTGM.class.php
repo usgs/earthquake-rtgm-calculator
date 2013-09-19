@@ -81,13 +81,12 @@ class RTGM {
 	 *      if internal RTGM calculation exceeds the maximum iterations
 	 */
 	public function calculate () {
-
 		// uniform hazard ground motion
 		$uhgm = RTGM_Util::findLogLogX($this->hazCurve->xs, $this->hazCurve->ys,
 				$this->afe4uhgm);
 
-		$rtgmIters = array();
-		$riskIters = array();
+		$this->rtgmIters = array();
+		$this->riskIters = array();
 
 		// For adequate discretization of fragility curves...
 		$upsampHazCurve = $this->logResample($this->hazCurve, self::MIN_SA,
@@ -101,14 +100,15 @@ class RTGM {
 
 			if ($i == 0) {
 				$rtgmTmp = $uhgm;
-			} else if (i == 1) {
-				$rtgmTmp = $rtgmIters[0] * $errorRatio;
+			} else if ($i == 1) {
+				$rtgmTmp = $this->rtgmIters[0] * $errorRatio;
 			} else {
-				$rtgmTmp = RGM_Utils::findLogLogY($riskIters, $rtgmIters,
-						$target_risk);
+				$rtgmTmp = RTGM_Util::findLogLogY($this->riskIters,
+						$this->rtgmIters, $this->target_risk);
 			}
 
 			// Generate fragility curve corresponding to current guess for RTGM
+			print $rtgmTmp . ' ';
 			$fc = new FragilityCurve($rtgmTmp, $upsampHazCurve, $this->beta);
 
 			/* Calculate risk using fragility curve generated above & upsampled
@@ -117,31 +117,31 @@ class RTGM {
 
 			// Check risk calculated above against target risk
 			$errorRatio = $this->checkRiskAgainstTarget($riskTmp);
-			$riskIters[] = $riskTmp;
-			$rtgmIters[] = $rtgmTmp;
+			print $riskTmp . ' ';
+			$this->riskIters[] = $riskTmp;
+			$this->rtgmIters[] = $rtgmTmp;
 
 			// Exit if ratio of calculated and target risks is within tolerance
 			if ($errorRatio == 1) break;
 
 			// If number of iterations has reached specified maximum, exit loop
-			if ($i == MAX_ITERATIONS) {
+			if ($i == self::MAX_ITERATIONS) {
 				throw new Exception("RTGM: max # iterations reached: " .
-						MAX_ITERATIONS);
+						self::MAX_ITERATIONS);
 			}
 		}
 
 		if ($errorRatio != 1) {
-			$rtgm = NAN;
+			$this->rtgm = NAN;
 		}
 		else {
-			$rtgm = $rtgmIters[count($rtgmIters) - 1];
+			$this->rtgm = $this->rtgmIters[count($this->rtgmIters) - 1];
 		}
-		$riskCoeff = $rtgm / $uhgm;
+		$this->riskCoeff = $this->rtgm / $uhgm;
 
-		for ($j = 0; $j < count($riskIters); $j++) {
-			$riskIters[$j] = $riskIters[$j] / $target_risk;
+		for ($i = 0; $i < count($this->riskIters); $i++) {
+			$this->riskIters[$i] = $this->riskIters[$i] / $this->target_risk;
 		}
-		return $this;
 	}
 
 	/**
@@ -160,8 +160,8 @@ class RTGM {
 	 * Compares calculated risk to target risk; returns 1 if within tolerance.
 	 */
 	private function checkRiskAgainstTarget ($risk) {
-		$er = $risk / $target_risk; // error ratio
-		return abs($er - 1) < TOLERANCE ? 1 : $er;
+		$er = $risk / $this->target_risk; // error ratio
+		return abs($er - 1) < self::TOLERANCE ? 1 : $er;
 	}
 
 	/* 
@@ -174,7 +174,7 @@ class RTGM {
 	 */
 	private function firstZeroValue ($data) {
 		for ($i = 0; $i < count($data); $i++) {
-			if (abs($data[$i]) < 0.00001) {
+			if ($data[$i] == 0.0) {
 				break;
 			}
 		}

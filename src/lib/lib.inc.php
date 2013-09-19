@@ -10,4 +10,4 @@ include_once $classDir . 'RTGM.class.php';
 include_once $classDir . 'RTGM_Util.class.php';
 include_once $classDir . 'Statistics.class.php';
 include_once $classDir . 'XY_Series.class.php';
-
+?>
