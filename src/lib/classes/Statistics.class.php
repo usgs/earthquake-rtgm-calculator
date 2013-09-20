@@ -175,65 +175,65 @@ class Statistics {
 		$ret;
 		$t = $x <= 0.5 ? $x : ($x - 0.5) - 0.5;
 		if ($t < 0.0) {
-			$a = INV_GAMMA1P_M1_A0 + $t * INV_GAMMA1P_M1_A1;
-			$b = INV_GAMMA1P_M1_B8;
-			$b = INV_GAMMA1P_M1_B7 + $t * $b;
-			$b = INV_GAMMA1P_M1_B6 + $t * $b;
-			$b = INV_GAMMA1P_M1_B5 + $t * $b;
-			$b = INV_GAMMA1P_M1_B4 + $t * $b;
-			$b = INV_GAMMA1P_M1_B3 + $t * $b;
-			$b = INV_GAMMA1P_M1_B2 + $t * $b;
-			$b = INV_GAMMA1P_M1_B1 + $t * $b;
+			$a = self::INV_GAMMA1P_M1_A0 + $t * self::INV_GAMMA1P_M1_A1;
+			$b = self::INV_GAMMA1P_M1_B8;
+			$b = self::INV_GAMMA1P_M1_B7 + $t * $b;
+			$b = self::INV_GAMMA1P_M1_B6 + $t * $b;
+			$b = self::INV_GAMMA1P_M1_B5 + $t * $b;
+			$b = self::INV_GAMMA1P_M1_B4 + $t * $b;
+			$b = self::INV_GAMMA1P_M1_B3 + $t * $b;
+			$b = self::INV_GAMMA1P_M1_B2 + $t * $b;
+			$b = self::INV_GAMMA1P_M1_B1 + $t * $b;
 			$b = 1.0 + $t * $b;
 
-			$c = INV_GAMMA1P_M1_C13 + $t * ($a / $b);
-			$c = INV_GAMMA1P_M1_C12 + $t * $c;
-			$c = INV_GAMMA1P_M1_C11 + $t * $c;
-			$c = INV_GAMMA1P_M1_C10 + $t * $c;
-			$c = INV_GAMMA1P_M1_C9 + $t * $c;
-			$c = INV_GAMMA1P_M1_C8 + $t * $c;
-			$c = INV_GAMMA1P_M1_C7 + $t * $c;
-			$c = INV_GAMMA1P_M1_C6 + $t * $c;
-			$c = INV_GAMMA1P_M1_C5 + $t * $c;
-			$c = INV_GAMMA1P_M1_C4 + $t * $c;
-			$c = INV_GAMMA1P_M1_C3 + $t * $c;
-			$c = INV_GAMMA1P_M1_C2 + $t * $c;
-			$c = INV_GAMMA1P_M1_C1 + $t * $c;
-			$c = INV_GAMMA1P_M1_C + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C13 + $t * ($a / $b);
+			$c = self::INV_GAMMA1P_M1_C12 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C11 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C10 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C9 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C8 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C7 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C6 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C5 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C4 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C3 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C2 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C1 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C + $t * $c;
 			if ($x > 0.5) {
 				$ret = $t * $c / $x;
 			} else {
 				$ret = $x * (($c + 0.5) + 0.5);
 			}
 		} else {
-			$p = INV_GAMMA1P_M1_P6;
-			$p = INV_GAMMA1P_M1_P5 + $t * $p;
-			$p = INV_GAMMA1P_M1_P4 + $t * $p;
-			$p = INV_GAMMA1P_M1_P3 + $t * $p;
-			$p = INV_GAMMA1P_M1_P2 + $t * $p;
-			$p = INV_GAMMA1P_M1_P1 + $t * $p;
-			$p = INV_GAMMA1P_M1_P0 + $t * $p;
+			$p = self::INV_GAMMA1P_M1_P6;
+			$p = self::INV_GAMMA1P_M1_P5 + $t * $p;
+			$p = self::INV_GAMMA1P_M1_P4 + $t * $p;
+			$p = self::INV_GAMMA1P_M1_P3 + $t * $p;
+			$p = self::INV_GAMMA1P_M1_P2 + $t * $p;
+			$p = self::INV_GAMMA1P_M1_P1 + $t * $p;
+			$p = self::INV_GAMMA1P_M1_P0 + $t * $p;
 
-			$q = INV_GAMMA1P_M1_Q4;
-			$q = INV_GAMMA1P_M1_Q3 + $t * $q;
-			$q = INV_GAMMA1P_M1_Q2 + $t * $q;
-			$q = INV_GAMMA1P_M1_Q1 + $t * $q;
+			$q = self::INV_GAMMA1P_M1_Q4;
+			$q = self::INV_GAMMA1P_M1_Q3 + $t * $q;
+			$q = self::INV_GAMMA1P_M1_Q2 + $t * $q;
+			$q = self::INV_GAMMA1P_M1_Q1 + $t * $q;
 			$q = 1.0 + $t * $q;
 
-			$c = INV_GAMMA1P_M1_C13 + ($p / $q) * $t;
-			$c = INV_GAMMA1P_M1_C12 + $t * $c;
-			$c = INV_GAMMA1P_M1_C11 + $t * $c;
-			$c = INV_GAMMA1P_M1_C10 + $t * $c;
-			$c = INV_GAMMA1P_M1_C9 + $t * $c;
-			$c = INV_GAMMA1P_M1_C8 + $t * $c;
-			$c = INV_GAMMA1P_M1_C7 + $t * $c;
-			$c = INV_GAMMA1P_M1_C6 + $t * $c;
-			$c = INV_GAMMA1P_M1_C5 + $t * $c;
-			$c = INV_GAMMA1P_M1_C4 + $t * $c;
-			$c = INV_GAMMA1P_M1_C3 + $t * $c;
-			$c = INV_GAMMA1P_M1_C2 + $t * $c;
-			$c = INV_GAMMA1P_M1_C1 + $t * $c;
-			$c = INV_GAMMA1P_M1_C0 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C13 + ($p / $q) * $t;
+			$c = self::INV_GAMMA1P_M1_C12 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C11 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C10 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C9 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C8 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C7 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C6 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C5 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C4 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C3 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C2 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C1 + $t * $c;
+			$c = self::INV_GAMMA1P_M1_C0 + $t * $c;
 
 			if ($x > 0.5) {
 				$ret = ($t / $x) * (($c - 0.5) - 0.5);
@@ -321,7 +321,7 @@ class Statistics {
 	public static function regularizedGammaP ($a, $x, $epsilon,
 		$maxIterations) {
 		$ret;
-		if (isNAN($a) || isNAN($x) || ($a <= 0.0) || ($x < 0.0)) {
+		if (is_nan($a) || is_nan($x) || ($a <= 0.0) || ($x < 0.0)) {
 			$ret = NAN;
 		} else if ($x == 0.0) {
 			$ret = 0.0;
@@ -350,11 +350,12 @@ class Statistics {
 			} else if (is_infinite($sum)) {
 				$ret = 1.0;
 			} else {
-				$ret = exp(-$x + ($a * log($x)) - Statistics::logGamma($a)) * $sum;
+				$ret = exp(-$x + ($a * log($x)) - Statistics::logGamma($a)) *
+						$sum;
 			}
 		}
 
-		return ret;
+		return $ret;
 	}
 
 	/**
@@ -400,11 +401,11 @@ class Statistics {
 			$a1 = Statistics::getA($a, $n, $x);
 			$b1 = Statistics::getB($a, $n);
 
-			$dN = $a + $b * $dPrev;
+			$dN = $a1 + $b1 * $dPrev;
 			if (abs($dN) <= $small) {
 				$dN = $small;
 			}
-			$cN = $a + $b / $cPrev;
+			$cN = $a1 + $b1 / $cPrev;
 			if (abs($cN) <= $small) {
 				$cN = $small;
 			}
@@ -417,7 +418,7 @@ class Statistics {
 				throw new Exception("Continued fraction convergents diverged " .
 						"to +/- infinity for value " . $x);
 			}
-			if (is_NAN($hN)) {
+			if (is_nan($hN)) {
 				throw new Exception("Continued fraction convergents diverged " .
 						"to NaN for value " . $x);
 			}

@@ -23,7 +23,7 @@ class RTGM_Util {
 	 *    than the specified key. Note that this guarantees that the return
 	 *    value will be >= 0 if and only if the key is found.
 	 */
-	public static function binary_search($a, $key) {
+	public static function binary_search ($a, $key) {
 		$low = 0;
 		$high = count($a) - 1;
 		if ($key < 0.01) {
@@ -60,7 +60,7 @@ class RTGM_Util {
 			$step, $ascending) {
 		$seq = RTGM_Util::buildSequence(log($min), log($max),
 			log($step), $ascending);
-		return RTGM_Util::exp($seq);
+		return RTGM_Util::exp(&$seq);
 	}
 
 	/**
@@ -77,16 +77,19 @@ class RTGM_Util {
 		// if passed in arguments are NaN, +Inf, or -Inf, and step <= 0,
 		// then capacity [c] will end up 0 because (int) NaN = 0, or outside the
 		// range 1:10000
-		$c = floor(($max - $min) / $step);
-		if ($c < 1 || $c >= RTGM_Util::MAX_SEQ_LEN) {
+		$c = intval(($max - $min) / $step);
+		if ($c <= 0) {
+			return;
+		}
+		else if ($c >= RTGM_Util::MAX_SEQ_LEN) {
 			throw new Exception("RTGM_Util::buildSequence: max sequence " .
-					"length reached: " . MAX_SEQ_LEN);
+					"length reached: " . RTGM_Util::MAX_SEQ_LEN);
 		}		
 		if ($ascending) {
 			return RTGM_Util::makeSequence($min, $max, $step, $c + 2);
 		}
 		$descSeq = RTGM_Util::makeSequence(-$max, -$min, $step, $c + 2);
-		return RTGM_Util::flip($descSeq);
+		return RTGM_Util::flip(&$descSeq);
 	}
 
 	/**
@@ -97,10 +100,8 @@ class RTGM_Util {
 	 * @param data to operate on
 	 * @return a reference to the data
 	 */
-	public static function exp($data) {
-		for ($i=0; $i < count($data); $i++) {
-			$data[$i] = exp($data[$i]);
-		}
+	public static function exp ($data) {
+		array_map(function (&$d) {$d = exp($d);}, &$data);
 		return $data;
 	}
 
@@ -128,7 +129,7 @@ class RTGM_Util {
 	 * @param x value at which to find y
 	 * @return the log-log interpolated y-value
 	 */
-	public static function findLogLogY($xs, $ys, $x) {
+	public static function findLogLogY ($xs, $ys, $x) {
 		$i = RTGM_Util::dataIndex($xs, $x);
 		return exp(RTGM_Util::findY(log($xs[$i]), log($ys[$i]),
 			log($xs[$i + 1]), log($ys[$i + 1]), log($x)));
@@ -143,8 +144,7 @@ class RTGM_Util {
 	 * @param x value at which to find y
 	 * @return the log-log interpolated y-values
 	 */
-	public static function findLogLogYArrays($xs, $ys, $x) {
-		$y = array();
+	public static function findLogLogYArrays ($xs, $ys, $x) {
 		for ($i = 0; $i < count($x); $i++) {
 			$y[] = RTGM_Util::findLogLogY($xs, $ys, $x[$i]);
 		}
@@ -175,7 +175,7 @@ class RTGM_Util {
 	 * @return a reference to the data
 	 */
 	public static function flip($data) {
-		return RTGM_Util::scale(-1, data);
+		return RTGM_Util::scale(&$data, -1);
 	}
 
 	public static function logNormalDensity ($x, $mean, $std) {
@@ -188,7 +188,9 @@ class RTGM_Util {
 	}
 
 	public static function logNormalCumProb ($x, $mean, $std) {
-		if ($x <= 0) return 0;
+		if ($x <= 0) {
+			return 0;
+		}
 		$dev = log($x) - $mean;
 		if (abs($dev) > 40 * $std) {
 			return dev < 0 ? 0.0 : 1.0;
@@ -204,9 +206,7 @@ class RTGM_Util {
 	 * @return a reference to {@code data1}
 	 */
 	public static function multiply($data1, $data2) {
-		for ($i = 0; $i < count($data1); $i++) {
-			$data1[$i] = $data1[$i] * $data2[$i];
-		}
+		array_map(function (&$d1, &$d2) {$d1 *= $d2;}, &$data1, $data2);
 		return $data1;
 	}
 
@@ -223,22 +223,10 @@ class RTGM_Util {
 	 * @param value to scale by
 	 * @return a reference to the supplied data
 	 */
-	public static function scale($value, $data) {
-		for ($i = 0; $i < count($data); $i++) {
-			$data[$i] = $data[$i] * $value;
-		}
+	public static function scale ($data, $value) {
+		array_map(function(&$d1) use($value) {$d1 = $d1 * $value;}, &$data);
 		return $data;
 	}	
-
-	private static function dataIndex($data, $value) {
-		$i = RTGM_Util::binary_search($data, $value);
-		// adjust index for low value (-1) and in-sequence insertion pt
-		// Note: below works in java as expected but not in PHP
-//		$i = ($i == -1) ? 0 : ($i < 0) ? -$i - 2 : $i;
-		$i = ($i == -1) ? 0 : (($i < 0) ? -$i - 2 : $i);
-		// adjust hi index to next to last index
-		return ($i >= count($data) - 1) ? --$i : $i;
-	}
 
 	/**
 	 * Performs trapezoidal rule integration on the supplied discretized
@@ -254,14 +242,22 @@ class RTGM_Util {
 		return $sum * 0.5;
 	}
 
-	private static function makeSequence($min, $max, $step, $capacity) {
+	private static function dataIndex ($data, $value) {
+		$i = RTGM_Util::binary_search($data, $value);
+		// adjust index for low value (-1) and in-sequence insertion pt
+		// Note: below works in java as expected but not in PHP
+//		$i = ($i == -1) ? 0 : ($i < 0) ? -$i - 2 : $i;
+		$i = ($i == -1) ? 0 : (($i < 0) ? -$i - 2 : $i);
+		// adjust hi index to next to last index
+		return ($i >= count($data) - 1) ? --$i : $i;
+	}
+
+	private static function makeSequence ($min, $max, $step, $capacity) {
 		$seq = array();
 		for ($val = $min; $val < $max; $val = $val + $step) {
 			$seq[] = $val;
 		}
-		if ($seq[count($seq) - 1] != $max) {
-			$seq[] = $max;
-		}
+		$seq[] = $max;
 		return $seq;
 	}		
 

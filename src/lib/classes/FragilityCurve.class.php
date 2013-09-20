@@ -16,7 +16,7 @@ class FragilityCurve {
 	private $pdf=null;
 
 	public function __construct ($rtgm, $model, $beta) {
-		$median = $rtgm / exp(RTGM_Util::norminv(self::FRAGILITY_AT_RTGM)
+		$this->median = $rtgm / exp(RTGM_Util::norminv(self::FRAGILITY_AT_RTGM)
 				* $beta);
 		$this->model = $model;
 		$this->beta = $beta;

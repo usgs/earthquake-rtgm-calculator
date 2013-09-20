@@ -28,12 +28,12 @@ class RTGM {
 	public $riskIters = null;
 	public $sa = null;
 
-	private $beta = self::BETA_DEFAULT;
-
 	/* Annual frequency of exceedance for Uniform-Hazard Ground Motion (UHGM)
 	   UHGM is both denominator of risk coefficient and initial guess for RTGM
 	   2% PE 50yrs */
 	private $afe4uhgm;
+
+	private $beta = self::BETA_DEFAULT;
 
 	// Target risk in terms of annual frequency
 	private $target_risk;
@@ -108,7 +108,6 @@ class RTGM {
 			}
 
 			// Generate fragility curve corresponding to current guess for RTGM
-			print $rtgmTmp . ' ';
 			$fc = new FragilityCurve($rtgmTmp, $upsampHazCurve, $this->beta);
 
 			/* Calculate risk using fragility curve generated above & upsampled
@@ -117,7 +116,6 @@ class RTGM {
 
 			// Check risk calculated above against target risk
 			$errorRatio = $this->checkRiskAgainstTarget($riskTmp);
-			print $riskTmp . ' ';
 			$this->riskIters[] = $riskTmp;
 			$this->rtgmIters[] = $rtgmTmp;
 
@@ -144,24 +142,12 @@ class RTGM {
 		}
 	}
 
-	/**
-	 * Returns the risk-targeted ground motion for the hazard curve supplied at
-	 * creation.
-	 * @return the risk targeted ground motion
-	 */
-	public function get () {
-		// In the USGS seismic design maps, hazard curves are scaled by a
-		// frequency dependent factor. If a frequency was supplied at creation,
-		// the corresponding scale factor is applied here to the rtgm value.
-		return ($sa != null) ? $rtgm * $sa->scale : $rtgm;
-	}
-
 	/* 
 	 * Compares calculated risk to target risk; returns 1 if within tolerance.
 	 */
 	private function checkRiskAgainstTarget ($risk) {
 		$er = $risk / $this->target_risk; // error ratio
-		return abs($er - 1) < self::TOLERANCE ? 1 : $er;
+		return abs($er - 1) <= self::TOLERANCE ? 1 : $er;
 	}
 
 	/* 
@@ -200,7 +186,7 @@ class RTGM {
 	 */
 	private function riskIntegral ($fragPDF, $hazCurve) {
 		// multiply fragPDF in place
-		$fragPDF->ys = RTGM_Util::multiply($fragPDF->ys, $hazCurve->ys); 
+		$fragPDF->ys = RTGM_Util::multiply(&$fragPDF->ys, $hazCurve->ys); 
 		return RTGM_Util::trapz($fragPDF->xs, $fragPDF->ys);
 	}
 
