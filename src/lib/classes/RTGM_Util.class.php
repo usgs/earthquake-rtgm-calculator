@@ -34,11 +34,9 @@ class RTGM_Util {
 
 			if ($midVal < $key) {
 				$low = $mid + 1;
-			}
-			else if ($midVal > $key) {
+			} else if ($midVal > $key) {
  				$high = $mid - 1;
-			}
-			else {
+			} else {
 				return $mid; // key found
 			}
 		}
@@ -60,7 +58,7 @@ class RTGM_Util {
 			$step, $ascending) {
 		$seq = RTGM_Util::buildSequence(log($min), log($max),
 			log($step), $ascending);
-		return RTGM_Util::exp(&$seq);
+		return RTGM_Util::exp($seq);
 	}
 
 	/**
@@ -80,8 +78,7 @@ class RTGM_Util {
 		$c = intval(($max - $min) / $step);
 		if ($c <= 0) {
 			return;
-		}
-		else if ($c >= RTGM_Util::MAX_SEQ_LEN) {
+		} else if ($c >= RTGM_Util::MAX_SEQ_LEN) {
 			throw new Exception("RTGM_Util::buildSequence: max sequence " .
 					"length reached: " . RTGM_Util::MAX_SEQ_LEN);
 		}		
@@ -89,7 +86,7 @@ class RTGM_Util {
 			return RTGM_Util::makeSequence($min, $max, $step, $c + 2);
 		}
 		$descSeq = RTGM_Util::makeSequence(-$max, -$min, $step, $c + 2);
-		return RTGM_Util::flip(&$descSeq);
+		return RTGM_Util::flip($descSeq);
 	}
 
 	/**
@@ -100,8 +97,8 @@ class RTGM_Util {
 	 * @param data to operate on
 	 * @return a reference to the data
 	 */
-	public static function exp ($data) {
-		array_map(function (&$d) {$d = exp($d);}, &$data);
+	public static function exp (&$data) {
+		$data = array_map(function ($d) {return exp($d);}, $data);
 		return $data;
 	}
 
@@ -174,8 +171,8 @@ class RTGM_Util {
 	 * @param data to operate on
 	 * @return a reference to the data
 	 */
-	public static function flip($data) {
-		return RTGM_Util::scale(&$data, -1);
+	public static function flip(&$data) {
+		return RTGM_Util::scale($data, -1);
 	}
 
 	public static function logNormalDensity ($x, $mean, $std) {
@@ -205,8 +202,9 @@ class RTGM_Util {
 	 * @param data2
 	 * @return a reference to {@code data1}
 	 */
-	public static function multiply($data1, $data2) {
-		array_map(function (&$d1, &$d2) {$d1 *= $d2;}, &$data1, $data2);
+	public static function multiply(&$data1, $data2) {
+		$data1 = array_map(function ($d1, $d2) {return $d1 * $d2;},
+				$data1, $data2);
 		return $data1;
 	}
 
@@ -223,8 +221,9 @@ class RTGM_Util {
 	 * @param value to scale by
 	 * @return a reference to the supplied data
 	 */
-	public static function scale ($data, $value) {
-		array_map(function(&$d1) use($value) {$d1 = $d1 * $value;}, &$data);
+	public static function scale (&$data, $value) {
+		$data = array_map(function($d1) use($value) {return $d1 * $value;},
+				$data);
 		return $data;
 	}	
 

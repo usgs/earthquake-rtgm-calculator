@@ -4,13 +4,11 @@
 			$epsilon = 0.0000000001;
 			if (gettype($actual) == "double") {
 				$passed = abs($expectation - $actual) < $epsilon;
-			}
-			else if (gettype($actual) == "array") {
+			} else if (gettype($actual) == "array") {
 				$size = count($actual);
 				if ($size != count($expectation)) {
 					$passed = false;
-				}
-				else {
+				} else {
 					$passed = true;
 					for ($i=0; $i < $size; $i++) {
 						$passed = abs($expectation[$i] - $actual[$i]) 
@@ -18,17 +16,25 @@
 						if (!$passed) break;
 					}
 				}
-			}
-			else {
+			} else {
 				$passed = ($expectation == $actual);
 			}
 
-			printf("[%s] Running test '%s' %s\n",
-				$passed ? 'Passed' : 'Failed',
-				$testName,
-				($passed) ? '' : sprintf("(Expected '%s' received '%s')",
-						json_encode($expectation), json_encode($actual))
-			);
+			if (gettype($actual) == "array") {
+				printf("[%s] Running test '%s' %s\n",
+						$passed ? 'Passed' : 'Failed',
+						$testName,
+						($passed) ? '' : 
+						sprintf("(Expected ['%s'] received ['%s'])",
+						implode(', ',$expectation), implode(', ',$actual)));
+			} else {
+				printf("[%s] Running test '%s' %s\n",
+						$passed ? 'Passed' : 'Failed',
+						$testName,
+						($passed) ? '' : 
+						sprintf("(Expected '%s' received '%s')",
+						$expectation, $actual));
+			}
 		}
 	}
 
@@ -72,8 +78,9 @@
 				true)));
 		notify('Build Sequence Inf/NaN', 0, count(RTGM_Util::buildSequence
 				(INF, NAN, 1, true)));
+		$a2 = array(1, 2, 3);
 		notify('Exp', array(2.718281828459,7.3890560989307,20.085536923188),
-				RTGM_Util::exp(array(1, 2, 3)));
+				RTGM_Util::exp($a2));
 		notify('Find Log Log X', $uhgm,
 				RTGM_Util::findLogLogX($rtgm->hazCurve->xs,
 				$rtgm->hazCurve->ys, $afe4uhgm));
@@ -87,9 +94,11 @@
 				RTGM_Util::logNormalDensity(1.3, 1.6, 0.6));
 		notify('Log Normal Density (0)', 0.0, 
 				RTGM_Util::logNormalDensity(0.0, 1.6, 0.6));
-		notify('Multiply', array(3, 8, 15), RTGM_Util::multiply(array(1, 2, 3),
+		$a3 = array(1, 2, 3);
+		notify('Multiply', array(3, 8, 15), RTGM_Util::multiply($a3,
 				array(3, 4, 5)));
-		notify('Scale', array(1, 2, 3), RTGM_Util::scale(array(10, 20, 30),.1));
+		$a4 = array(10, 20, 30);
+		notify('Scale', array(1, 2, 3), RTGM_Util::scale($a4, .1));
 		notify('Trapz', $riskTmp, RTGM_Util::trapz($xs, $ys));
 
 		// Statistics method tests
@@ -131,9 +140,9 @@
 		notify('Get rtgm iter', $rtgmIters, $rtgm->rtgmIters);
 		notify('Get risk iter', $riskIters, $rtgm->riskIters);
 //		print json_encode($rtgm);
-		printf ("riskCoeff: %s\n",json_encode($rtgm->riskCoeff));
-		printf ("rtgmIters: %s\n",json_encode($rtgm->rtgmIters));
-		printf ("riskIters: %s\n",json_encode($rtgm->riskIters));
+		printf ("\nriskCoeff: %s\n", $rtgm->riskCoeff);
+		printf ("rtgmIters: [%s]\n",implode(', ', $rtgm->rtgmIters));
+		printf ("riskIters: [%s]\n",implode(', ',$rtgm->riskIters));
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
 	}

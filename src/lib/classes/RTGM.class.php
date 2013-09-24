@@ -61,8 +61,7 @@ class RTGM {
 		if ($zeroPos < count($xs)) {
 			$this->hazCurve->xs = array_slice($xs, 0, $zeroPos);
 			$this->hazCurve->ys = array_slice($ys, 0, $zeroPos);
-		}
-		else {
+		} else {
 			$this->hazCurve->xs = $xs;
 			$this->hazCurve->ys = $ys;
 		}
@@ -131,8 +130,7 @@ class RTGM {
 
 		if ($errorRatio != 1) {
 			$this->rtgm = NAN;
-		}
-		else {
+		} else {
 			$this->rtgm = $this->rtgmIters[count($this->rtgmIters) - 1];
 		}
 		$this->riskCoeff = $this->rtgm / $uhgm;
@@ -186,7 +184,7 @@ class RTGM {
 	 */
 	private function riskIntegral ($fragPDF, $hazCurve) {
 		// multiply fragPDF in place
-		$fragPDF->ys = RTGM_Util::multiply(&$fragPDF->ys, $hazCurve->ys); 
+		$fragPDF->ys = RTGM_Util::multiply($fragPDF->ys, $hazCurve->ys); 
 		return RTGM_Util::trapz($fragPDF->xs, $fragPDF->ys);
 	}
 
