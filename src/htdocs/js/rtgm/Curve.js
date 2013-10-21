@@ -11,13 +11,13 @@ define([
 		'ys': []
 	};
 
-	var Curve = function(attributes) {
+	var Curve = function (attributes) {
 
 		// check the array sizes
-	    if (!attributes || (attributes.xs.length !== attributes.ys.length)) {
+		if (!attributes || (attributes.xs.length !== attributes.ys.length)) {
 			throw 'X and Y arrays (of the same size) are required';
 		}
-		
+
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, attributes));
 
