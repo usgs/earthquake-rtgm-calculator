@@ -11,7 +11,7 @@
 				} else {
 					$passed = true;
 					for ($i=0; $i < $size; $i++) {
-						$passed = abs($expectation[$i] - $actual[$i]) 
+						$passed = abs($expectation[$i] - $actual[$i])
 								< $epsilon;
 						if (!$passed) break;
 					}
@@ -24,14 +24,14 @@
 				printf("[%s] Running test '%s' %s\n",
 						$passed ? 'Passed' : 'Failed',
 						$testName,
-						($passed) ? '' : 
+						($passed) ? '' :
 						sprintf("(Expected ['%s'] received ['%s'])",
 						implode(', ',$expectation), implode(', ',$actual)));
 			} else {
 				printf("[%s] Running test '%s' %s\n",
 						$passed ? 'Passed' : 'Failed',
 						$testName,
-						($passed) ? '' : 
+						($passed) ? '' :
 						sprintf("(Expected '%s' received '%s')",
 						$expectation, $actual));
 			}
@@ -47,12 +47,12 @@
 				1.64, 2.46, 3.69, 5.54);
 		$ys = array(0.4782, 0.3901, 0.3055, 0.2322, 0.1716, 0.1241, 0.08621,
 				0.05687, 0.03492, 0.01985, 0.01045, 0.005095, 0.002302,
-				0.0009371, 0.0003308, 9.488e-05, 1.952e-05, 2.174e-06, 
+				0.0009371, 0.0003308, 9.488e-05, 1.952e-05, 2.174e-06,
 				8.553e-08, 1.315e-10);
-				
+
 		// What we expect back
 		$riskCoeff = 0.9559509060952;
-		$rtgmIters = array(0.67538571727694, 0.60742309988984, 
+		$rtgmIters = array(0.67538571727694, 0.60742309988984,
 				0.64563558839465);
 		$riskIters = array(0.89937214298651, 1.1544629679089,
 				1.0007739262587);
@@ -66,8 +66,8 @@
 		$uhgm = 0.6753857172769;
 		$usampling_factor = 1.05;
 
-		$rtgm = new RTGM($xs, $ys, Frequency::SA_1P00, 0.8); 
-		
+		$rtgm = new RTGM($xs, $ys, Frequency::SA_1P00, 0.8);
+
 		// RGTM_Util method tests
 		$a = array(1.0, 3.0, 5.0, 7.0, 8.0, 9.0, 10.0);
 		notify('Binary search found', 2, RTGM_Util::binary_search($a, 5.0));
@@ -84,15 +84,15 @@
 		notify('Find Log Log X', $uhgm,
 				RTGM_Util::findLogLogX($rtgm->hazCurve->xs,
 				$rtgm->hazCurve->ys, $afe4uhgm));
-		notify('Find Log Log Y', $rtgmTmp, 
+		notify('Find Log Log Y', $rtgmTmp,
 				RTGM_Util::findLogLogY($riskIters, $rtgmIters, $target_risk));
-		notify('Log Normal Cumulative Prob', 0.040507341811011, 
+		notify('Log Normal Cumulative Prob', 0.040507341811011,
 				RTGM_Util::logNormalCumProb(1.3, 1.6, 0.6));
-		notify('Log Normal Cumulative Prob (0)', 0.0, 
+		notify('Log Normal Cumulative Prob (0)', 0.0,
 				RTGM_Util::logNormalCumProb(0.0, 1.6, 0.6));
-		notify('Log Normal Density', 0.042613954514149, 
+		notify('Log Normal Density', 0.042613954514149,
 				RTGM_Util::logNormalDensity(1.3, 1.6, 0.6));
-		notify('Log Normal Density (0)', 0.0, 
+		notify('Log Normal Density (0)', 0.0,
 				RTGM_Util::logNormalDensity(0.0, 1.6, 0.6));
 		$a3 = array(1, 2, 3);
 		notify('Multiply', array(3, 8, 15), RTGM_Util::multiply($a3,

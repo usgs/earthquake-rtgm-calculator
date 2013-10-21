@@ -2,7 +2,7 @@
 
 /**
  * Static utilities for use by the RTGM calculator.
- */ 
+ */
 class RTGM_Util {
 
 	const MAX_SEQ_LEN = 10001;
@@ -81,7 +81,7 @@ class RTGM_Util {
 		} else if ($c >= RTGM_Util::MAX_SEQ_LEN) {
 			throw new Exception("RTGM_Util::buildSequence: max sequence " .
 					"length reached: " . RTGM_Util::MAX_SEQ_LEN);
-		}		
+		}
 		if ($ascending) {
 			return RTGM_Util::makeSequence($min, $max, $step, $c + 2);
 		}
@@ -90,9 +90,9 @@ class RTGM_Util {
 	}
 
 	/**
-	 * Applies the exponential function to every element of the supplied 
+	 * Applies the exponential function to every element of the supplied
 	 * {@code data}.
-	 * 
+	 *
 	 * <p><b>Note:</b> This method does not check for over/underflow.</p>
 	 * @param data to operate on
 	 * @return a reference to the data
@@ -109,18 +109,18 @@ class RTGM_Util {
 	 * This satisfies the monotonically increasing requirements of x and y
 	 * data.
 	 *
-	 * @return the log-interpolated 
+	 * @return the log-interpolated
 	 */
 	public static function findLogLogX ($xs, $ys, $y) {
 		$revXs = array_reverse($xs);
 		$revYs = array_reverse($ys);
 		return RTGM_Util::findLogLogY($revYs, $revXs, $y);
 	}
-	
+
 	/**
 	 * Returns the log-log interpolated or extrapolated y-value using the
 	 * supplied x- and y-value arrays.
-	 * 
+	 *
 	 * @param xs x-values of some function
 	 * @param ys y-values of some function
 	 * @param x value at which to find y
@@ -135,7 +135,7 @@ class RTGM_Util {
 	/**
 	 * Returns the log-log interpolated or extrapolated y-values using the
 	 * supplied x- and y-value arrays.
-	 * 
+	 *
 	 * @param xs x-values of some function
 	 * @param ys y-values of some function
 	 * @param x value at which to find y
@@ -154,7 +154,7 @@ class RTGM_Util {
 	 * will also be {@code NaN}. Method does not do any input validation such
 	 * that if the supplied points are coincident or define a vertical line, the
 	 * method may return {@code Infinity}, {@code -Infinity}, or {@code NaN}.
-	 * 
+	 *
 	 * @param x1 x-value of first point
 	 * @param y1 y-value of first point
 	 * @param x2 x-value of second point
@@ -211,11 +211,11 @@ class RTGM_Util {
 	public static function norminv ($p) {
 		return Statistics::inverseCumulativeProbability($p);
 	}
-	
+
 	/**
 	 * Scales (multiplies) the elements of the supplied {@code data} in place
 	 * by {@code value}.
-	 * 
+	 *
 	 * <p><b>Note:</b> This method does not check for over/underflow.</p>
 	 * @param data to scale
 	 * @param value to scale by
@@ -225,7 +225,7 @@ class RTGM_Util {
 		$data = array_map(function($d1) use($value) {return $d1 * $value;},
 				$data);
 		return $data;
-	}	
+	}
 
 	/**
 	 * Performs trapezoidal rule integration on the supplied discretized
@@ -258,7 +258,7 @@ class RTGM_Util {
 		}
 		$seq[] = $max;
 		return $seq;
-	}		
+	}
 
 }
 

@@ -2,7 +2,7 @@
 
 /**
  * Wrapper class for fragility curve data.
- */ 
+ */
 class FragilityCurve {
 
 	// Probability on fragility curve at RTGM
@@ -33,7 +33,7 @@ class FragilityCurve {
 			}
 			return $this->pdf;
 		}
-	} 
+	}
 
 	public function cdf () {
 		if ($this->cdf == null) {

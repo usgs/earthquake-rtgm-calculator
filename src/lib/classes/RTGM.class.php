@@ -3,7 +3,7 @@
 /**
  * Class for calculating risk-targeted ground motions (RTGM).
  * Implementation is an adaptation of Matlab codes provided by N. Luco.
- */ 
+ */
 class RTGM {
 
 	// Logarithmic standard deviation of fragility curve
@@ -42,7 +42,7 @@ class RTGM {
 	 * Creates a new RTGM calculation and result container for the supplied
 	 * hazard curve. Users must call {@code call()} to initiate calculation of a
 	 * risk-targeted ground motion that can be retreived using {@code get()}.
-	 * 
+	 *
 	 * @param xs hazard curve x-values
 	 * @param ys hazard curve y-values
 	 * @param sa specifies the period of the supplied curve; if not {@code null}
@@ -76,7 +76,7 @@ class RTGM {
 	/**
 	 * Maked the internal iterative RTGM calculation.
 	 *
-	 * @throws {Exception} 
+	 * @throws {Exception}
 	 *      if internal RTGM calculation exceeds the maximum iterations
 	 */
 	public function calculate () {
@@ -140,7 +140,7 @@ class RTGM {
 		}
 	}
 
-	/* 
+	/*
 	 * Compares calculated risk to target risk; returns 1 if within tolerance.
 	 */
 	private function checkRiskAgainstTarget ($risk) {
@@ -148,12 +148,12 @@ class RTGM {
 		return abs($er - 1) <= self::TOLERANCE ? 1 : $er;
 	}
 
-	/* 
+	/*
 	 * Returns the index of the first zero-valued data point. This method is
 	 * used to check the tails of hazard curves that often have zero-valued
 	 * rates. This could be updated to check for very low values instead, as
 	 * some hazard curve generating software could supply "near-zero" values
-	 * in lieu of actual zeros. Method assumes that all subsequent values will 
+	 * in lieu of actual zeros. Method assumes that all subsequent values will
 	 * also be zero. Method also ensures that data will have at least 2 values.
 	 */
 	private function firstZeroValue ($data) {
@@ -165,18 +165,18 @@ class RTGM {
 		return $i;
 	}
 
-	/* 
+	/*
 	 * Resamples hc with supplied interval over min to f.max.
 	 */
 	private function logResample ($in, $min, $interval) {
 		$out = new XY_Series();
-		$out->xs = RTGM_Util::buildLogSequence($min, 
+		$out->xs = RTGM_Util::buildLogSequence($min,
 				$in->xs[count($in->xs) - 1], $interval, true);
 		$out->ys = RTGM_Util::findLogLogYArrays($in->xs, $in->ys, $out->xs);
 		return $out;
 	}
 
-	/* 
+	/*
 	 * Evaluates the Risk Integral.
 	 *
 	 * This method assumes that the fragility PDF is defined at the same
@@ -184,7 +184,7 @@ class RTGM {
 	 */
 	private function riskIntegral ($fragPDF, $hazCurve) {
 		// multiply fragPDF in place
-		$fragPDF->ys = RTGM_Util::multiply($fragPDF->ys, $hazCurve->ys); 
+		$fragPDF->ys = RTGM_Util::multiply($fragPDF->ys, $hazCurve->ys);
 		return RTGM_Util::trapz($fragPDF->xs, $fragPDF->ys);
 	}
 

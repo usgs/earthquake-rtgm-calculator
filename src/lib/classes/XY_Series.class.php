@@ -2,7 +2,7 @@
 
 /**
  * Wrapper class for X-Y curve data.
- */ 
+ */
 class XY_Series {
 
 	public $xs;
