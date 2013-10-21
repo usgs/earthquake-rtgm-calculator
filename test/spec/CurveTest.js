@@ -26,7 +26,7 @@ define([
 
 		describe('constructor()', function () {
 
-			it('Good Curve (vald array arguments)', function () {
+			it('Good Curve (valid array arguments)', function () {
 				var curve = new Curve(GOODDATA);
 				expect(curve).to.be.an.instanceOf(Curve);
 				expect(curve.get('xs')).to.deep.equal(GOODDATA.xs);
