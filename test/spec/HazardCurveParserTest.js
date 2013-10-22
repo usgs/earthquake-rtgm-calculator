@@ -13,31 +13,31 @@ define([
 
 	var BADX_C = {
 		'inputString': 'abc	0.4782\n0.00375	0.3901\n0.00563	0.3055\n'
-	}
+	};
 	var BADX_R = {
 		'inputString': '0.0025, 0.00375, xyz\n0.4782, 0.3901, 0.3055\n\n'
-	}
+	};
 	var BADY_C = {
 		'inputString': '0.0025	0.4782\n0.00375	0.3901\n0.00563	def\n'
-	}
+	};
 	var BADY_R = {
 		'inputString': '0.0025, 0.00375, 0.00563\n0.4782, zzz, 0.3055\n\n'
-	}
+	};
 	var DIFFCOLS_C = {
 		'inputString': '0.0025	0.4782\n0.3901\n0.00563	0.3055\n'
-	}
+	};
 	var DIFFCOLS_R = {
 		'inputString': '0.0025, 0.00375, 0.00563\n0.4782, 0.3901\n\n'
-	}
+	};
 	var NO_DELIM = {
 		'inputString': '0.0025 0.4782\n0.00375 0.3901\n0.00563 0.3055\n'
-	}
+	};
 	var NO_ROWS = {
 		'inputString': '\n\n'
-	}
+	};
 	var ONE_COL = {
 		'inputString': '0.0025|\n'
-	}
+	};
 	var RESULTDATA = {
 		'xs': [0.0025, 0.00375, 0.00563],
 		'ys': [0.4782, 0.3901, 0.3055]
@@ -45,13 +45,13 @@ define([
 	var THREE_ROWS = {
 		'inputString': '0.0025;0.00375;0.00563\n0.4782;0.3901;0.3055\n' +
 				'0.0025;0.00375;0.00563\n'
-	}
+	};
 	var XYCOLS = {
 		'inputString': '0.0025	0.4782\n0.00375	0.3901\n0.00563	0.3055\n'
-	}
+	};
 	var XYROWS = {
 		'inputString': '0.0025, 0.00375, 0.00563\n0.4782, 0.3901, 0.3055\n\n'
-	}
+	};
 
 	describe('Unit tests for the "HazardCurveParser" class', function () {
 
@@ -60,7 +60,6 @@ define([
 
 			var curve;
 			var func;
-			var hcp;
 
 			it('Good XY rows (csv)', function () {
 				curve = HazardCurveParser.parse(XYROWS);
@@ -78,21 +77,21 @@ define([
 				func = function() {
 					HazardCurveParser.parse();
 				};
-				expect(func).to.throw(HazardCurveParser.EXCEPTIONS['BLANK']);
+				expect(func).to.throw(HazardCurveParser.EXCEPTIONS.BLANK);
 			});
 
 			it('No rows', function () {
 				func = function() {
 					HazardCurveParser.parse(NO_ROWS);
 				};
-				expect(func).to.throw(HazardCurveParser.EXCEPTIONS['NO_ROWS']);
+				expect(func).to.throw(HazardCurveParser.EXCEPTIONS.NO_ROWS);
 			});
 
 			it('No delimiter', function () {
 				func = function() {
 					HazardCurveParser.parse(NO_DELIM);
 				};
-				expect(func).to.throw(HazardCurveParser.EXCEPTIONS['NO_DELIM']);
+				expect(func).to.throw(HazardCurveParser.EXCEPTIONS.NO_DELIM);
 			});
 
 			it('At least two columns', function () {
@@ -100,7 +99,7 @@ define([
 					HazardCurveParser.parse(ONE_COL);
 				};
 				expect(func).to.throw(HazardCurveParser.
-						EXCEPTIONS['LESS_THAN_TWO_COLUMNS']);
+						EXCEPTIONS.LESS_THAN_TWO_COLUMNS);
 			});
 
 			it('Too many rows', function () {
@@ -108,7 +107,7 @@ define([
 					HazardCurveParser.parse(THREE_ROWS);
 				};
 				expect(func).to.throw(HazardCurveParser.
-						EXCEPTIONS['TWO_ROWS_REQUIRED']);
+						EXCEPTIONS.TWO_ROWS_REQUIRED);
 			});
 
 			it('XY rows, mismatched number of columns', function () {

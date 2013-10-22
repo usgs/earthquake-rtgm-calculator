@@ -4,9 +4,8 @@
 
 define([
 	'chai',
-	'rtgm/Curve',
-	'mvc/Model'
-], function (chai, Curve, Model) {
+	'rtgm/Curve'
+], function (chai, Curve) {
 	'use strict';
 	var expect = chai.expect;
 

@@ -24,12 +24,12 @@ define([
 			return 'Parse error: Row ' + row + ' must contain ' + ncols +
 					' columns.';
 		},
-		
+
 		invalidVal: function (dim, row, col) {
-			return 'Parse error: Invalid ' + dim + ' value in row ' + row + 
-					', column ' + col + '.'
+			return 'Parse error: Invalid ' + dim + ' value in row ' + row +
+					', column ' + col + '.';
 		},
-		
+
 		/**
 		* Parses the input string into a curve object containing the
 		* appropriate X and Y arrays.  Allows for two types of formats:
@@ -40,7 +40,7 @@ define([
 		* 2. Any number of lines of delimited (X, Y) coordinate pairs.
 		*
 		* Will attempt to use any single non-alphanumeric character (except
-		* spaces or cr/lf) as a delimiter but the character used must be 
+		* spaces or cr/lf) as a delimiter but the character used must be
 		* consistent (ie. the first one found is THE delimiter).
 		*
 		* @return {Curve} the curve object containing the parsed data.
@@ -52,8 +52,8 @@ define([
 			var i;
 			var pairPerRow = false;
 			var inputString = null;
-			if (!data || !(inputString = data['inputString'])) {
-				throw this.EXCEPTIONS['BLANK'];
+			if (!data || !(inputString = data.inputString)) {
+				throw this.EXCEPTIONS.BLANK;
 			}
 			var lines = inputString.split(/\r\n|\r|\n/);
 
@@ -65,23 +65,23 @@ define([
 				}
 			}
 			if (rows.length === 0) {
-				throw this.EXCEPTIONS['NO_ROWS'];
+				throw this.EXCEPTIONS.NO_ROWS;
 			}
 
 			// Pre-parsing (determine format and delimiter)
 			var delim = rows[0].match(/[^0-9a-zA-Z .-]/);
 			if (!delim) {
-				throw this.EXCEPTIONS['NO_DELIM'];
+				throw this.EXCEPTIONS.NO_DELIM;
 			}
 			var columns = rows[0].split(delim);
 			var numColumns = columns.length;
-			if (numColumns < 2 || numColumns === 2 && 
+			if (numColumns < 2 || numColumns === 2 &&
 					columns[1].trim().length === 0) {
-				throw this.EXCEPTIONS['LESS_THAN_TWO_COLUMNS'];
+				throw this.EXCEPTIONS.LESS_THAN_TWO_COLUMNS;
 			} else if (numColumns === 2) {
 				pairPerRow = true;
 			} else if (rows.length !== 2) {
-				throw this.EXCEPTIONS['TWO_ROWS_REQUIRED'];
+				throw this.EXCEPTIONS.TWO_ROWS_REQUIRED;
 			}
 
 			// Now extract the pairs
@@ -90,7 +90,7 @@ define([
 			if (pairPerRow) {
 				for (i = 0; i < rows.length; i++) {
 					var cols = rows[i].split(delim);
-					if (cols.length !== 2 || cols.length === 2 && 
+					if (cols.length !== 2 || cols.length === 2 &&
 							cols[1].trim().length === 0) {
 						throw this.invalidNumCols((i+1), 2);
 					}
@@ -106,8 +106,8 @@ define([
 			} else {
 				var colsX = rows[0].split(delim);
 				var colsY = rows[1].split(delim);
-				if (colsX.length !== numColumns || colsX.length === numColumns
-						&& colsX[colsX.length-1].trim().length === 0) {
+				if (colsX.length !== numColumns || colsX.length === numColumns &&
+						colsX[colsX.length-1].trim().length === 0) {
 					throw this.invalidNumCols(1, numColumns);
 				} else if (colsY.length !== numColumns || colsY.length ===
 						numColumns && colsY[colsY.length-1].trim().length ===
