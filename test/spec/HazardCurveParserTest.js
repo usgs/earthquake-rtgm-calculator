@@ -5,10 +5,10 @@
 define([
 	'chai',
 	'rtgm/Curve',
-	'rtgm/HazardCurveParser',
-	'mvc/Model'
-], function (chai, Curve, HazardCurveParser, Model) {
+	'rtgm/HazardCurveParser'
+], function (chai, Curve, HazardCurveParser) {
 	'use strict';
+
 	var expect = chai.expect;
 
 	var BADX_C = {
@@ -32,7 +32,7 @@ define([
 	var NO_DELIM = {
 		'inputString': '0.0025 0.4782\n0.00375 0.3901\n0.00563 0.3055\n'
 	}
-	var NOROWS = {
+	var NO_ROWS = {
 		'inputString': '\n\n'
 	}
 	var ONE_COL = {
@@ -63,114 +63,94 @@ define([
 			var hcp;
 
 			it('Good XY rows (csv)', function () {
-				hcp = new HazardCurveParser(XYROWS);
-				curve = hcp.parse();
-				expect(hcp).to.be.an.instanceOf(HazardCurveParser);
+				curve = HazardCurveParser.parse(XYROWS);
 				expect(curve.get('xs')).to.deep.equal(RESULTDATA.xs);
 				expect(curve.get('ys')).to.deep.equal(RESULTDATA.ys);
 			});
 
 			it('Good XY columns (tab-delimited)', function () {
-				hcp = new HazardCurveParser(XYCOLS);
-				expect(hcp).to.be.an.instanceOf(HazardCurveParser);
-				curve = hcp.parse();
+				curve = HazardCurveParser.parse(XYCOLS);
 				expect(curve.get('xs')).to.deep.equal(RESULTDATA.xs);
 				expect(curve.get('ys')).to.deep.equal(RESULTDATA.ys);
 			});
 
 			it('No input string', function () {
-				hcp = new HazardCurveParser();
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse();
 				};
-				expect(func).to.throw('Parse error: Input string is blank.');
+				expect(func).to.throw(HazardCurveParser.EXCEPTIONS['BLANK']);
 			});
 
 			it('No rows', function () {
-				hcp = new HazardCurveParser(NOROWS);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(NO_ROWS);
 				};
-				expect(func).to.throw('Parse error: Input string must ' +
-						'contain at least 1 row.');
+				expect(func).to.throw(HazardCurveParser.EXCEPTIONS['NO_ROWS']);
 			});
 
 			it('No delimiter', function () {
-				hcp = new HazardCurveParser(NO_DELIM);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(NO_DELIM);
 				};
-				expect(func).to.throw('Parse error: No delimiter found in ' +
-						'input string.');
+				expect(func).to.throw(HazardCurveParser.EXCEPTIONS['NO_DELIM']);
 			});
 
 			it('At least two columns', function () {
-				hcp = new HazardCurveParser(ONE_COL);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(ONE_COL);
 				};
-				expect(func).to.throw('Parse error: Input string must ' +
-						'contain at least 2 columns.');
+				expect(func).to.throw(HazardCurveParser.
+						EXCEPTIONS['LESS_THAN_TWO_COLUMNS']);
 			});
 
 			it('Too many rows', function () {
-				hcp = new HazardCurveParser(THREE_ROWS);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(THREE_ROWS);
 				};
-				expect(func).to.throw('Parse error: Input string with more ' +
-					'than 2 columns must contain 2 rows (row 1 for X values ' +
-					'and row 2 for Y values).');
+				expect(func).to.throw(HazardCurveParser.
+						EXCEPTIONS['TWO_ROWS_REQUIRED']);
 			});
 
 			it('XY rows, mismatched number of columns', function () {
-				hcp = new HazardCurveParser(DIFFCOLS_R);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(DIFFCOLS_R);
 				};
-				expect(func).to.throw('Parse error: Row 2 must contain ' +
-						'3 columns.');
+				expect(func).to.throw(HazardCurveParser.invalidNumCols(2, 3));
 			});
 
 			it('XY rows, bad X', function () {
-				hcp = new HazardCurveParser(BADX_R);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(BADX_R);
 				};
-				expect(func).to.throw('Invalid X value in row 1, column 3.');
+				expect(func).to.throw(HazardCurveParser.invalidVal('X', 1, 3));
 			});
 
 			it('XY rows, bad Y', function () {
-				hcp = new HazardCurveParser(BADY_R);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(BADY_R);
 				};
-				expect(func).to.throw('Invalid Y value in row 2, column 2.');
+				expect(func).to.throw(HazardCurveParser.invalidVal('Y', 2, 2));
 			});
 
 			it('XY columns, mismatched number of columns', function () {
-				hcp = new HazardCurveParser(DIFFCOLS_C);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(DIFFCOLS_C);
 				};
-				expect(func).to.throw('Parse error: Row 2 must contain ' +
-						'2 columns.');
+				expect(func).to.throw(HazardCurveParser.invalidNumCols(2, 2));
 			});
 
 			it('XY columns, bad X', function () {
-				hcp = new HazardCurveParser(BADX_C);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(BADX_C);
 				};
-				expect(func).to.throw('Invalid X value in row 1.');
+				expect(func).to.throw(HazardCurveParser.invalidVal('X', 1, 1));
 			});
 
 			it('XY columns, bad Y', function () {
-				hcp = new HazardCurveParser(BADY_C);
 				func = function() {
-					hcp.parse();
+					HazardCurveParser.parse(BADY_C);
 				};
-				expect(func).to.throw('Invalid Y value in row 3.');
+				expect(func).to.throw(HazardCurveParser.invalidVal('Y', 3, 2));
 			});
 		});
 	});
