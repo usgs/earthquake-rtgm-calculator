@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>UI Test for RTGM Input View</title>
+	<link rel="stylesheet" href="/css/index.css"/>
+	<link rel="stylesheet" href="/css/RTGMInputView.css"/>
+</head>
+<body>
+	<div id="inputView"></div>
+	<div id="results"></div>
+	<script src="requirejs/require.js"></script>
+	<script>
+		require.config({
+			baseUrl: '.',
+			paths: {
+				mvc: '/hazdev-webutils/src/mvc',
+				util: '/hazdev-webutils/src/util'
+			},
+			shim: {
+			}
+		});
+
+		require([
+			'rtgm/RTGMInputView'
+		], function (RTGMInputView) {
+			var options = {
+				el: document.querySelector('#inputView')
+			};
+			var app = new RTGMInputView(options);
+			this.addEventListener('parseError', parseError);
+			this.addEventListener('onHazardCurve', success);
+		});
+		
+		var parseError = function (evt) {
+			results = document.querySelector('#results');
+			results.style = "color: red"; 
+			document.querySelector('#results').innerHTML = evt.err;
+		}
+		var success = function (evt) {
+			results = document.querySelector('#results');
+			results.style = "color: green"; 
+			document.querySelector('#results').innerHTML = 'Success!';
+		}	
+		</script>
+</body>
+</html>
