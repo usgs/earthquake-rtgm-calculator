@@ -1,19 +1,22 @@
 /*global define*/
 define([
 	'mvc/View',
-	'util/Events',
 	'util/Util',
 	'rtgm/Curve',
 	'rtgm/HazardCurveParser'
 ], function (
 	View,
-	Events,
 	Util,
 	Curve,
 	HazardCurveParser
 ) {
 
 	'use strict';
+
+	var peEvt = document.createEvent("Event");
+	peEvt.initEvent("parseError",true,true);
+	var okEvt = document.createEvent("Event");
+	okEvt.initEvent("onHazardCurve",true,true);
 
 	var _inputArea = null;
 
@@ -82,12 +85,13 @@ define([
 		try {
 			this._curve = HazardCurveParser.parse(inputString);
 			console.log('Parse successful.');
-//		Trigger onHazardCurve success event here
+			dispatchEvent(okEvt);
 		}
 		catch (ex) {
 			this._curve = null;
 			console.log(ex);
-//		Trigger error event here
+			peEvt.err = ex;
+			dispatchEvent(peEvt);
 		}
 	};
 

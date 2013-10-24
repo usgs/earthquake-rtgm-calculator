@@ -7,6 +7,7 @@
 </head>
 <body>
 	<div id="inputView"></div>
+	<div id="results"></div>
 	<script src="requirejs/require.js"></script>
 	<script>
 		require.config({
@@ -26,7 +27,20 @@
 				el: document.querySelector('#inputView')
 			};
 			var app = new RTGMInputView(options);
+			this.addEventListener('parseError', parseError);
+			this.addEventListener('onHazardCurve', success);
 		});
-	</script>
+		
+		var parseError = function (evt) {
+			results = document.querySelector('#results');
+			results.style = "color: red"; 
+			document.querySelector('#results').innerHTML = evt.err;
+		}
+		var success = function (evt) {
+			results = document.querySelector('#results');
+			results.style = "color: green"; 
+			document.querySelector('#results').innerHTML = 'Success!';
+		}	
+		</script>
 </body>
 </html>

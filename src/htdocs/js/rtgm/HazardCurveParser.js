@@ -15,7 +15,7 @@ define([
 					'at least 2 columns.',
 			NO_DELIM: 'Parse error: No delimiter found in input string.',
 			NO_ROWS: 'Parse error: Input string must contain at least 1 row.',
-			TWO_ROWS_REQUIRED: 'Parse error: Input string with more than 2' +
+			TWO_ROWS_REQUIRED: 'Parse error: Input string with more than 2 ' +
 					'columns must contain 2 rows (row 1 for X values and' +
 					'row 2 for Y values).'
 		},
