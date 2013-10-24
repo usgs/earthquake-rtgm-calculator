@@ -6,5 +6,6 @@ before_script:
   - npm install -g grunt-cli
   - npm install -g bower
   - bower install
-  - which php
   - php --version
+before_install:
+  - sudo apt-get install php
