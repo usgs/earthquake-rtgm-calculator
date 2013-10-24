@@ -4,11 +4,9 @@
 define([
 	'chai',
 	'rtgm/RTGMInputView',
-	'rtgm/Curve'
 ], function (
 	chai,
-	RTGMInputView,
-	Curve
+	RTGMInputView
 ) {
 
 	'use strict';
@@ -25,14 +23,6 @@ define([
 
 	describe('Unit tests for the "RTGMInputView" class', function () {
 
-		var testBaselineCalculator = {
-			inclination : function () { return 1; },
-			horizontalComponent : function () { return 2; },
-			verticalComponent : function () { return 3; },
-			southDownMinusNorthUp : function () { return 4; },
-			northDownMinusSouthUp : function () { return 5; }
-		};
-
 		it('can be required', function () {
 			/*jshint -W030*/
 			expect(RTGMInputView).to.not.be.undefined;
@@ -44,10 +34,8 @@ define([
 			view._inputArea.value = XYCOLS.inputString;
 			view.parseRequest();
 
-			/*jshint -W030*/
 			expect(view._curve.get('xs')).to.deep.equal(RESULTDATA.xs);
 			expect(view._curve.get('ys')).to.deep.equal(RESULTDATA.ys);
-			/*jshint +W030*/
 		});
 
 		it('bad hazard curve', function () {
