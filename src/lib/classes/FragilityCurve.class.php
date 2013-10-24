@@ -44,19 +44,6 @@ class FragilityCurve {
 				$this->cdf->ys[$i] = RTGM_Util::logNormalCumProb(
 						$this->model->xs[$i], log($this->median), $this->beta);
 			}
-
-			// $pdf = $this->getPdf();
-			// $partialx = array(); $partialy = array();
-			// $size = count($pdf->xs);
-			// $this->cdf = new XY_Series($size);
-			// for ($i = 0; $i < $size; $i++) {
-			// 	$partialx[] = $pdf->xs[$i];
-			// 	$partialy[] = $pdf->ys[$i];
-			// 	$this->cdf->xs[$i] = $pdf->xs[$i];
-			// 	$this->cdf->ys[$i] = RTGM_Util::trapz($partialx, $partialy);
-			// }
-
-
 		}
 		return $this->cdf;
 	}
