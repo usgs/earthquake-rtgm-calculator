@@ -1,4 +1,5 @@
-/*global define*/
+/* global define */
+
 define([
 	'mvc/View',
 	'util/Util',
@@ -10,13 +11,7 @@ define([
 	Curve,
 	HazardCurveParser
 ) {
-
 	'use strict';
-
-	var peEvt = document.createEvent("Event");
-	peEvt.initEvent("parseError",true,true);
-	var okEvt = document.createEvent("Event");
-	okEvt.initEvent("onHazardCurve",true,true);
 
 	var _inputArea = null;
 
@@ -54,7 +49,7 @@ define([
 						'column containing the X value and the second column ' +
 						'containing the matching Y value. Any characater can ' +
 						'be used to delimit values on the same line with the ' +
-						'exception of spaces, letters, numbers, decimal' + 
+						'exception of spaces, letters, numbers, decimal' +
 						'points or plus/minus signs.</p>',
 				'<form onsubmit="return false;">',
 					'<textarea id="inputArea" rows="15"></textarea><br/><br/>',
@@ -66,7 +61,11 @@ define([
 
 		this._computeButton = this._el.querySelector('#compute');
 		this._inputArea = _inputArea = this._el.querySelector('#inputArea');
-		this._computeButton.addEventListener('click', this.parseRequest);
+		this._computeButton.addEventListener('click', (function (scope) {
+			return function (evt) {
+				scope.parseRequest(evt);
+			};
+		})(this));
 
 		// render the view
 		this.render();
@@ -78,20 +77,17 @@ define([
 	RTGMInputView.prototype.render = function () {
 	};
 
-	RTGMInputView.prototype.parseRequest = function (evt) {
+	RTGMInputView.prototype.parseRequest = function () {
 		var inputString = {
 			'inputString': _inputArea.value
 		};
 		try {
 			this._curve = HazardCurveParser.parse(inputString);
-			console.log('Parse successful.');
-			dispatchEvent(okEvt);
+			this.trigger('hazardCurve', {input: inputString, curve: this._curve});
 		}
 		catch (ex) {
 			this._curve = null;
-			console.log(ex);
-			peEvt.err = ex;
-			dispatchEvent(peEvt);
+			this.trigger('hazardCurveError', {input: inputString});
 		}
 	};
 
