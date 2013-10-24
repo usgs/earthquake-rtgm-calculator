@@ -29,7 +29,8 @@ require([
 	// Add each test class here as they are implemented
 	require([
 		'spec/CurveTest',
-		'spec/HazardCurveParserTest'
+		'spec/HazardCurveParserTest',
+		'spec/RTGMInputViewTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
