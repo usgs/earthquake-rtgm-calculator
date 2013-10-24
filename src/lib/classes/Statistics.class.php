@@ -7,7 +7,7 @@
  * http://commons.apache.org/proper/commons-math/javadocs/api-3.2/index.html
  *
  * See api for algorthim details.
- */ 
+ */
 class Statistics {
 
 	// invGamma1pm1 constants
@@ -251,7 +251,8 @@ class Statistics {
 	public static function lanczos ($x) {
 		$sum = 0.0;
 		// Lanczos coefficients
-		$lanczos = array(0.99999999999999709182,
+		$lanczos = array(
+				0.99999999999999709182,
 				57.156235665862923517,
 				-59.597960355475491248,
 				14.136097974741747174,
@@ -270,7 +271,7 @@ class Statistics {
 		for ($i = count($lanczos) - 1; $i > 0; --$i) {
 			$sum = $sum + ($lanczos[$i] / ($x + $i));
 		}
-		return $sum + $lanczos[0];	
+		return $sum + $lanczos[0];
 	}
 
 	/**
@@ -290,7 +291,7 @@ class Statistics {
 			$n = intval(floor($x - 1.5));
 			$prod = 1.0;
 			for ($i = 1; $i <= $n; $i++) {
-			$prod = $prod * (x - i);
+				$prod = $prod * (x - $i);
 			}
 			return Statistics::logGamma1p($x - ($n + 1)) + log($prod);
 		} else {
@@ -312,7 +313,7 @@ class Statistics {
 		if ($x > 1.5) {
 			throw new Exception($x . " is larger then the maximum 1.5");
 		}
-		return log1p(Statistics::invGamma1pm1($x));
+		return (-1.0 * log1p(Statistics::invGamma1pm1($x)));
 	}
 
 	/**
@@ -335,7 +336,7 @@ class Statistics {
 			$n = 0.0; // current element index
 			$an = 1.0 / $a; // n-th element in the series
 			$sum = $an; // partial sum
-			while (abs($an/$sum) > $epsilon && $n < $maxIterations && 
+			while (abs($an/$sum) > $epsilon && $n < $maxIterations &&
 					$sum < INF) {
 				// compute next element in the series
 				$n = $n + 1.0;
@@ -381,7 +382,7 @@ class Statistics {
 	}
 
 	/**
-	 * Evaluates the continued fraction at the value x. (Specific to the 
+	 * Evaluates the continued fraction at the value x. (Specific to the
 	 * regularizedGammaQ function.)
 	*/
 	private static function cfEvaluate ($a, $x, $epsilon, $maxIterations) {
@@ -454,7 +455,7 @@ class Statistics {
 	 * regularizedGammaQ function).
 	*/
 	private static function getB ($a, $n) {
-		return $n * ($a - $n); 
+		return $n * ($a - $n);
 	}
 }
 
