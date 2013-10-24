@@ -84,10 +84,9 @@
 		notify('Exp', array(2.718281828459,7.3890560989307,20.085536923188),
 				RTGM_Util::exp($a2));
 		notify('Find Log Log X', $uhgm,
-				RTGM_Util::findLogLogX($rtgm->hazCurve->xs,
-				$rtgm->hazCurve->ys, $afe4uhgm));
-		notify('Find Log Log Y', $rtgmTmp,
-				RTGM_Util::findLogLogY($riskIters, $rtgmIters, $target_risk));
+				RTGM_Util::findLogLogX($xs, $ys, $afe4uhgm));
+		notify('Find Log Log Y', $afe4uhgm,
+				RTGM_Util::findLogLogY($xs, $ys, $uhgm));
 		notify('Log Normal Cumulative Prob', 0.012893887361471,
 				RTGM_Util::logNormalCumProb(1.3, 1.6, 0.6));
 		notify('Log Normal Cumulative Prob (0)', 0.0,
