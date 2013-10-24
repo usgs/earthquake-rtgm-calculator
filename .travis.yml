@@ -8,4 +8,5 @@ before_script:
   - bower install
   - php --version
 before_install:
-  - sudo apt-get install php
+  - sudo apt-cache search php
+  - sudo apt-get install php5
