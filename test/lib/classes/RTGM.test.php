@@ -1,6 +1,8 @@
 <?php
 	if (!function_exists('notify')) {
 		function notify ($testName, $expectation, $actual) {
+			global $exit_code;
+
 			$epsilon = 0.0000000001;
 			if (gettype($actual) == "double") {
 				$passed = abs($expectation - $actual) < $epsilon;
@@ -35,10 +37,12 @@
 						sprintf("(Expected '%s' received '%s')",
 						$expectation, $actual));
 			}
+			$exit_code += ($passed) ? 0 : 1;
 		}
 	}
 
 	include_once '../../../src/conf/config.inc.php';
+	$exit_code = 0;
 
 	try {
 		// Define curves for global test
@@ -51,11 +55,9 @@
 				8.553e-08, 1.315e-10);
 
 		// What we expect back
-		$riskCoeff = 0.9559509060952;
-		$rtgmIters = array(0.67538571727694, 0.60742309988984,
-				0.64563558839465);
-		$riskIters = array(0.89937214298651, 1.1544629679089,
-				1.0007739262587);
+		$riskCoeff = 0.95595068110365;
+		$rtgmIters = array(0.67538571727694, 0.60742259454374, 0.64563543643857);
+		$riskIters = array(0.89937139475318, 1.1544650238328, 1.0007739239289);
 
 		// Values for testing methods.
 		$afe4uhgm = -log(1 - 0.02) / 50;
@@ -86,7 +88,7 @@
 				$rtgm->hazCurve->ys, $afe4uhgm));
 		notify('Find Log Log Y', $rtgmTmp,
 				RTGM_Util::findLogLogY($riskIters, $rtgmIters, $target_risk));
-		notify('Log Normal Cumulative Prob', 0.040507341811011,
+		notify('Log Normal Cumulative Prob', 0.012893887361471,
 				RTGM_Util::logNormalCumProb(1.3, 1.6, 0.6));
 		notify('Log Normal Cumulative Prob (0)', 0.0,
 				RTGM_Util::logNormalCumProb(0.0, 1.6, 0.6));
@@ -128,10 +130,10 @@
 			notify('InvGamma1pm1 too large', $ex1, $ex1);
 		}
 		notify('Lanczos', 19.194552097849, Statistics::lanczos(0.5));
-		notify('LogGamma', -0.5723649429247, Statistics::logGamma(0.5));
-		notify('RegularizedGammaP', 2.4483331241247,
+		notify('LogGamma', 0.5723649429247, Statistics::logGamma(0.5));
+		notify('RegularizedGammaP', 0.77932863808015,
 				Statistics::regularizedGammaP(0.5, .75, 1.0e-15, 10000));
-		notify('RegularizedGammaQ', 0.19279586278375,
+		notify('RegularizedGammaQ', 0.061368829139402,
 				Statistics::regularizedGammaQ(0.5, 1.75, 1.0e-15, 10000));
 
 		// Global test
@@ -139,12 +141,13 @@
 		notify('Get risk coefficient', $riskCoeff, $rtgm->riskCoeff);
 		notify('Get rtgm iter', $rtgmIters, $rtgm->rtgmIters);
 		notify('Get risk iter', $riskIters, $rtgm->riskIters);
-//		print json_encode($rtgm);
 		printf ("\nriskCoeff: %s\n", $rtgm->riskCoeff);
 		printf ("rtgmIters: [%s]\n",implode(', ', $rtgm->rtgmIters));
 		printf ("riskIters: [%s]\n",implode(', ',$rtgm->riskIters));
 	} catch (Exception $e) {
 		print $e->getMessage() . "\n";
 	}
+
+	exit($exit_code);
 ?>
 
