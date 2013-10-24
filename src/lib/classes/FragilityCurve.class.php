@@ -22,7 +22,7 @@ class FragilityCurve {
 		$this->beta = $beta;
 	}
 
-	public function pdf () {
+	public function getPdf () {
 		if ($this->pdf == null) {
 			$size = count($this->model->xs);
 			$this->pdf = new XY_Series($size);
@@ -31,11 +31,11 @@ class FragilityCurve {
 				$this->pdf->ys[$i] = RTGM_Util::logNormalDensity(
 						$this->model->xs[$i], log($this->median), $this->beta);
 			}
-			return $this->pdf;
 		}
+		return $this->pdf;
 	}
 
-	public function cdf () {
+	public function getCdf () {
 		if ($this->cdf == null) {
 			$size = count($this->model->xs);
 			$this->cdf = new XY_Series($size);
@@ -44,8 +44,21 @@ class FragilityCurve {
 				$this->cdf->ys[$i] = RTGM_Util::logNormalCumProb(
 						$this->model->xs[$i], log($this->median), $this->beta);
 			}
-			return $this->cdf;
+
+			// $pdf = $this->getPdf();
+			// $partialx = array(); $partialy = array();
+			// $size = count($pdf->xs);
+			// $this->cdf = new XY_Series($size);
+			// for ($i = 0; $i < $size; $i++) {
+			// 	$partialx[] = $pdf->xs[$i];
+			// 	$partialy[] = $pdf->ys[$i];
+			// 	$this->cdf->xs[$i] = $pdf->xs[$i];
+			// 	$this->cdf->ys[$i] = RTGM_Util::trapz($partialx, $partialy);
+			// }
+
+
 		}
+		return $this->cdf;
 	}
 
 }
