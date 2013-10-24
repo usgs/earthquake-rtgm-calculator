@@ -28,6 +28,10 @@ class RTGM {
 	public $riskIters = null;
 	public $sa = null;
 
+	// Internal data structure for what we want back in JSON. Maybe should
+	// refactor this class a bit more to be simpler.
+	private $jsonStructure = array();
+
 	/* Annual frequency of exceedance for Uniform-Hazard Ground Motion (UHGM)
 	   UHGM is both denominator of risk coefficient and initial guess for RTGM
 	   2% PE 50yrs */
@@ -80,20 +84,26 @@ class RTGM {
 	 *      if internal RTGM calculation exceeds the maximum iterations
 	 */
 	public function calculate () {
+		$this->_resetJsonStructure();
+
 		// uniform hazard ground motion
 		$uhgm = RTGM_Util::findLogLogX($this->hazCurve->xs, $this->hazCurve->ys,
 				$this->afe4uhgm);
+		$this->jsonStructure['uhgm'] = $uhgm;
 
 		$this->rtgmIters = array();
 		$this->riskIters = array();
 
 		// For adequate discretization of fragility curves...
-		$upsampHazCurve = $this->logResample($this->hazCurve, self::MIN_SA,
-				self::UPSAMPLING_FACTOR);
+		$upsampHazCurve = $this->logResample($this->hazCurve, $uhgm);
+		$this->jsonStructure['upsampledHazardCurve'] = $upsampHazCurve;
+		$this->jsonStructure['originalHCMin'] = min($this->hazCurve->xs);
+		$this->jsonStructure['originalHCMax'] = max($this->hazCurve->xs);
 		$errorRatio = NAN;
 
 		// Iterative calculation of RTGM
 		for ($i = 0; $i < self::MAX_ITERATIONS; $i++) {
+			$this->_newJsonIteration();
 			$rtgmTmp;
 			$riskTmp;
 
@@ -108,15 +118,18 @@ class RTGM {
 
 			// Generate fragility curve corresponding to current guess for RTGM
 			$fc = new FragilityCurve($rtgmTmp, $upsampHazCurve, $this->beta);
+			$this->_pushJsonIteration('pdf', $fc->getPdf()->ys);
+			$this->_pushJsonIteration('cdf', $fc->getCdf()->ys);
 
 			/* Calculate risk using fragility curve generated above & upsampled
 			   hazard curve. */
-			$riskTmp = $this->riskIntegral($fc->pdf(), $upsampHazCurve);
+			$riskTmp = $this->riskIntegral($fc->getPdf(), $upsampHazCurve);
 
 			// Check risk calculated above against target risk
 			$errorRatio = $this->checkRiskAgainstTarget($riskTmp);
 			$this->riskIters[] = $riskTmp;
 			$this->rtgmIters[] = $rtgmTmp;
+			$this->_pushJsonIteration('rtgm', $rtgmTmp);
 
 			// Exit if ratio of calculated and target risks is within tolerance
 			if ($errorRatio == 1) break;
@@ -133,11 +146,18 @@ class RTGM {
 		} else {
 			$this->rtgm = $this->rtgmIters[count($this->rtgmIters) - 1];
 		}
+		$this->jsonStructure['rtgm'] = $this->rtgm;
+
 		$this->riskCoeff = $this->rtgm / $uhgm;
+		$this->jsonStructure['riskCoefficient'] = $this->riskCoeff;
 
 		for ($i = 0; $i < count($this->riskIters); $i++) {
 			$this->riskIters[$i] = $this->riskIters[$i] / $this->target_risk;
 		}
+	}
+
+	public function getStructure () {
+		return $this->jsonStructure;
 	}
 
 	/*
@@ -166,12 +186,15 @@ class RTGM {
 	}
 
 	/*
-	 * Resamples hc with supplied interval over min to f.max.
+	 * Resamples hc with supplied interval over a computed min/max domain.
 	 */
-	private function logResample ($in, $min, $interval) {
+	private function logResample ($in, $uhgm) {
+		$min = min(min($in->xs), $uhgm / 10);
+		$max = max(max($in->xs), $uhgm * 10);
+
 		$out = new XY_Series();
 		$out->xs = RTGM_Util::buildLogSequence($min,
-				$in->xs[count($in->xs) - 1], $interval, true);
+				$max, self::UPSAMPLING_FACTOR, true);
 		$out->ys = RTGM_Util::findLogLogYArrays($in->xs, $in->ys, $out->xs);
 		return $out;
 	}
@@ -185,7 +208,42 @@ class RTGM {
 	private function riskIntegral ($fragPDF, $hazCurve) {
 		// multiply fragPDF in place
 		$fragPDF->ys = RTGM_Util::multiply($fragPDF->ys, $hazCurve->ys);
-		return RTGM_Util::trapz($fragPDF->xs, $fragPDF->ys);
+		$this->_pushJsonIteration('integrand', $fragPDF->ys);
+
+		$xs = array();
+		$ys = array();
+		for ($i = 0; $i < count($fragPDF->ys); $i++) {
+			$xs[] = $fragPDF->xs[$i];
+			$ys[] = $fragPDF->ys[$i];
+			$r[] = RTGM_Util::trapz($xs, $ys);
+		}
+		$this->_pushJsonIteration('integral', $r);
+
+		return RTGM_Util::trapz($fragPDF->xs, $fragPDF->ys);;
+	}
+
+	private function _newJsonIteration () {
+		$this->jsonStructure['iterations'][] = array();
+	}
+
+	private function _pushJsonIteration ($key, $value) {
+		$iterations = $this->jsonStructure['iterations'];
+		$index = sizeof($iterations) - 1;
+		$structure = $iterations[$index];
+
+		$structure[$key] = $value;
+		$iterations[$index] = $structure;
+		$this->jsonStructure['iterations'] = $iterations;
+	}
+
+	private function _resetJsonStructure () {
+		$this->jsonStructure = array(
+			'rtgm' => null,
+			'uhgm' => null,
+			'riskCoefficient' => null,
+			'upsampledHazardCurve' => null,
+			'iterations' => array()
+		);
 	}
 
 }
