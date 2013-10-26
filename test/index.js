@@ -3,8 +3,9 @@ require.config({
 	paths: {
 		mocha: 'mocha/mocha',
 		chai: 'chai/chai',
-		'mvc': '/hazdev-webutils/src/mvc',
-		'util': '/hazdev-webutils/src/util'
+		sinon: 'sinon/pkg/sinon',
+		mvc: '/hazdev-webutils/src/mvc',
+		util: '/hazdev-webutils/src/util',
 	},
 	shim: {
 		mocha: {
@@ -13,6 +14,9 @@ require.config({
 		chai: {
 			deps: ['mocha'],
 			exports: 'chai'
+		},
+		sinon: {
+			exports: 'sinon'
 		}
 	}
 });
@@ -30,7 +34,8 @@ require([
 	require([
 		'spec/CurveTest',
 		'spec/HazardCurveParserTest',
-		'spec/RTGMInputViewTest'
+		'spec/RTGMInputViewTest',
+		'spec/RTGMCalculatorTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
