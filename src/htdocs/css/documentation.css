@@ -1,0 +1,11 @@
+.datatype {
+	font-style:italic;
+	color:#666;
+	font-size:0.9em;
+}
+.examples > li {
+	margin-bottom:8px;
+}
+.definitions > dt {
+	margin-top:8px;
+}
