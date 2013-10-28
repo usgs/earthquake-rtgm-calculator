@@ -15,12 +15,12 @@ if (function_exists('param')) {
 	<link rel="stylesheet" href="css/index.css"/>
 </head>
 <body>
-	<h1>Risk Targetted Ground Motion Calculator</h1>
+	<h1>Risk Targeted Ground Motion Calculator</h1>
 <?php
 }
 ?>
 
-<p>
+<p class="intro">
 	Web application for comuting risk-targeted ground motion values.
 </p>
 

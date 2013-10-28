@@ -1,10 +1,10 @@
 {
-	"name": "earthquake-rtgm-calculator",
-	"version": "0.0.0",
-	"dependencies": {
-		"hazdev-webutils": "~0.0.1",
-		"html5shiv-dist": "~3.6.2",
-		"requirejs": "~2.1.6"
-	},
-	"devDependencies": {}
+  "name": "earthquake-rtgm-calculator",
+  "version": "0.0.0",
+  "dependencies": {
+    "hazdev-webutils": "~0.0.1",
+    "html5shiv-dist": "~3.6.2",
+    "requirejs": "~2.1.6"
+  },
+  "devDependencies": {}
 }

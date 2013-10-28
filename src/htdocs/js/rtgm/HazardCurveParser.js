@@ -48,11 +48,11 @@ define([
 		* @throws an excpetion if the input can not be parsed.
 		*
 		*/
-		parse: function (data) {
+		parse: function (inputString) {
 			var i;
 			var pairPerRow = false;
-			var inputString = null;
-			if (!data || !(inputString = data.inputString)) {
+			if (typeof inputString === 'undefined' || inputString === null ||
+					inputString === '') {
 				throw this.EXCEPTIONS.BLANK;
 			}
 			var lines = inputString.split(/\r\n|\r|\n/);
