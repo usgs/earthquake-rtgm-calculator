@@ -1,18 +1,13 @@
-h2 {
-	text-align:center;
-	color:#222;
-}
-
-form {
-	width: 100%;
-	margin: 0 auto;
-}
-
-.buttonHolder {
-	margin: 0 auto;
-	width: 10%;
-}
-
-textarea {
-	width: 100%;
+.rtgm-input-view {
+	label {
+		font-weight:bold;
+		display:block;
+		color:#333;
+	}
+	input.rtgm-input-title, textarea.rtgm-input-data {
+		width:100%;
+	}
+	textarea.rtgm-input-data {
+		min-height:144px;
+	}
 }

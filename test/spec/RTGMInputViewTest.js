@@ -1,11 +1,11 @@
-/*global define*/
-/*global describe*/
-/*global it*/
+/* global define, describe, it */
 define([
 	'chai',
+	'sinon',
 	'rtgm/RTGMInputView',
 ], function (
 	chai,
+	sinon,
 	RTGMInputView
 ) {
 
@@ -30,21 +30,43 @@ define([
 		});
 
 		var view = new RTGMInputView();
-		it('good hazard curve', function () {
-			view._inputArea.value = XYCOLS.inputString;
+
+		it('notifies listeners for good input', function () {
+			var successCallback = function (evt) {
+					expect(evt.curve.get('xs')).to.deep.equal(RESULTDATA.xs);
+					expect(evt.curve.get('ys')).to.deep.equal(RESULTDATA.ys);
+			};
+			var successSpy = sinon.spy(successCallback),
+			    errorSpy = sinon.spy();
+
+			view.on('hazardCurve', successSpy);
+			view.on('hazardCurveError', errorSpy);
+
+			view._input.value = XYCOLS.inputString;
 			view.parseRequest();
 
-			expect(view._curve.get('xs')).to.deep.equal(RESULTDATA.xs);
-			expect(view._curve.get('ys')).to.deep.equal(RESULTDATA.ys);
+			view.off('hazardCurve', successSpy);
+			view.off('hazardCurveError', errorSpy);
+
+			expect(successSpy.callCount).to.equal(1);
+			expect(errorSpy.callCount).to.equal(0);
 		});
 
-		it('bad hazard curve', function () {
-			view._inputArea.value = '';
+		it('notifies listeners for bad input', function () {
+			var successSpy = sinon.spy(),
+			    errorSpy = sinon.spy();
+
+			view.on('hazardCurve', successSpy);
+			view.on('hazardCurveError', errorSpy);
+
+			view._input.value = '';
 			view.parseRequest();
 
-			/*jshint -W030*/
-			expect(view._curve).to.be.null;
-			/*jshint +W030*/
+			view.off('hazardCurve', successSpy);
+			view.off('hazardCurveError', errorSpy);
+
+			expect(successSpy.callCount).to.equal(0);
+			expect(errorSpy.callCount).to.equal(1);
 		});
 	});
 

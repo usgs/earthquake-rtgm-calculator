@@ -1,10 +1,12 @@
 /* global define */
 define([
 	'util/Events',
-	'util/Util'
+	'util/Util',
+	'mvc/Model'
 ], function (
 	Events,
-	Util
+	Util,
+	Model
 ) {
 	'use strict';
 
@@ -27,7 +29,7 @@ define([
 	};
 	RTGMCalculator.prototype = Object.create(Events.prototype);
 
-	RTGMCalculator.prototype.calculate = function (curve) {
+	RTGMCalculator.prototype.calculate = function (curve, title) {
 
 		var _this = this,
 		    script = document.createElement('script'),
@@ -49,8 +51,15 @@ define([
 		};
 
 		window[uniqueCallback] = function (data) {
+			var attrs = null;
 			if (data.status === 200) {
-				_this.trigger('success', data);
+				attrs = Util.extend({}, data.rtgm, {
+					title: title,
+					id: (new Date()).getTime(),
+					url: script.src.replace('/' + uniqueCallback, '')
+				});
+
+				_this.trigger('success', new Model(attrs));
 			} else {
 				_this.trigger('error', data);
 			}
@@ -64,12 +73,15 @@ define([
 	};
 
 	RTGMCalculator.prototype._createScriptUrl = function (curve, callback) {
-		return [
+		var url = [
 			this._baseUrl, '/',
 			curve.get('xs').join(','), '/',
-			curve.get('ys').join(','), '/',
-			callback
-		].join('');
+			curve.get('ys').join(','),
+		];
+		if (typeof callback === 'string') {
+			url.push('/' + callback);
+		}
+		return url.join('');
 	};
 
 	return RTGMCalculator;

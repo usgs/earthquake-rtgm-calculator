@@ -6,6 +6,7 @@ require.config({
 		sinon: 'sinon/pkg/sinon',
 		mvc: '/hazdev-webutils/src/mvc',
 		util: '/hazdev-webutils/src/util',
+		dygraph: '/dygraphs/dygraph-combined'
 	},
 	shim: {
 		mocha: {
@@ -17,6 +18,9 @@ require.config({
 		},
 		sinon: {
 			exports: 'sinon'
+		},
+		dygraph: {
+			exports: 'Dygraph'
 		}
 	}
 });
@@ -32,6 +36,7 @@ require([
 
 	// Add each test class here as they are implemented
 	require([
+		'spec/RTGMApplicationTest',
 		'spec/CurveTest',
 		'spec/HazardCurveParserTest',
 		'spec/RTGMInputViewTest',

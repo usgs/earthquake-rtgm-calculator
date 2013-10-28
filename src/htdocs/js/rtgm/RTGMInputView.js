@@ -13,55 +13,46 @@ define([
 ) {
 	'use strict';
 
-	var _inputArea = null;
+	var INPUT_VIEW_COUNTER = 0;
+	var DEFAULTS = {
 
-	/**
-	 * Construct a new view
-	 *
-	 * @param option {Object}
-	 *        view options.
-	 * @param option.baselineCalculator {geomag.ObservationBaselineCalculator}
-	 *        the calculator to use.
-	 * @param option.reading {geomag.Reading}
-	 *        the reading to display.
-	 */
-	var RTGMInputView = function (options) {
-		options = Util.extend({}, {}, options);
-		View.call(this, options);
 	};
 
+	var RTGMInputView = function (options) {
+		options = Util.extend({}, DEFAULTS, options);
+
+		this._id_prefix = 'rtgm-input-view-' + (INPUT_VIEW_COUNTER++) + '-';
+
+		View.call(this, options);
+	};
 	RTGMInputView.prototype = Object.create(View.prototype);
 
 	/**
 	 * Initialize view, and call render.
-	 * @param options {Object} same as constructor.
 	 */
-	RTGMInputView.prototype._initialize = function (options) {
-		this._options = options;
+	RTGMInputView.prototype._initialize = function () {
+		var titleId = this._id_prefix + 'title',
+		    inputId = this._id_prefix + 'data',
+		    computeId = this._id_prefix + 'compute';
+
+		Util.addClass(this._el, 'rtgm-input-view');
 
 		// build the view skeleton
 		this._el.innerHTML = [
-				'<h2>Hazard Curve Entry Form</h2>',
-				'<p>Enter a hazard curve in the text area below.  Format can ' +
-						'be two rows with the first containing X values ' +
-						'and the second containing matching Y values OR ' +
-						'multiple rows with two columns each (the first ' +
-						'column containing the X value and the second column ' +
-						'containing the matching Y value. Any characater can ' +
-						'be used to delimit values on the same line with the ' +
-						'exception of spaces, letters, numbers, decimal' +
-						'points or plus/minus signs.</p>',
-				'<form onsubmit="return false;">',
-					'<textarea id="inputArea" rows="15"></textarea><br/><br/>',
-					'<div class="buttonHolder">',
-						'<input type="submit" value="Compute" id="compute"/>',
-					'</div>',
-				'</form>'
+				'<label for="', titleId, '" class="rtgm-input-title">',
+					'Curve Title',
+				'</label>',
+				'<input type="text" id="', titleId, '" class="rtgm-input-title"/>',
+				'<label for="', inputId, '" class="rtgm-input-data">Curve Data</label>',
+				'<textarea id="', inputId, '" class="rtgm-input-data"></textarea>',
+				'<button id="', computeId, '">Compute RTGM</button>',
 		].join('');
 
-		this._computeButton = this._el.querySelector('#compute');
-		this._inputArea = _inputArea = this._el.querySelector('#inputArea');
-		this._computeButton.addEventListener('click', (function (scope) {
+		this._title = this._el.querySelector('#' + titleId);
+		this._input = this._el.querySelector('#' + inputId);
+		this._compute = this._el.querySelector('#' + computeId);
+
+		this._compute.addEventListener('click', (function (scope) {
 			return function (evt) {
 				scope.parseRequest(evt);
 			};
@@ -71,27 +62,15 @@ define([
 		this.render();
 	};
 
-	/**
-	 * Nothing special to do here, currently.
-	*/
-	RTGMInputView.prototype.render = function () {
-	};
-
 	RTGMInputView.prototype.parseRequest = function () {
-		var inputString = {
-			'inputString': _inputArea.value
-		};
+		var data = this._input.value;
 		try {
-			this._curve = HazardCurveParser.parse(inputString);
-			this.trigger('hazardCurve', {input: inputString, curve: this._curve});
-		}
-		catch (ex) {
-			this._curve = null;
-			this.trigger('hazardCurveError', {input: inputString});
+			this.trigger('hazardCurve', {title: this._title.value,
+					curve: HazardCurveParser.parse(data)});
+		} catch (ex) {
+			this.trigger('hazardCurveError', data);
 		}
 	};
 
-	// return the constructor
 	return RTGMInputView;
-
 });

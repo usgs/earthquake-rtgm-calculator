@@ -11,47 +11,23 @@ define([
 
 	var expect = chai.expect;
 
-	var BADX_C = {
-		'inputString': 'abc	0.4782\n0.00375	0.3901\n0.00563	0.3055\n'
-	};
-	var BADX_R = {
-		'inputString': '0.0025, 0.00375, xyz\n0.4782, 0.3901, 0.3055\n\n'
-	};
-	var BADY_C = {
-		'inputString': '0.0025	0.4782\n0.00375	0.3901\n0.00563	def\n'
-	};
-	var BADY_R = {
-		'inputString': '0.0025, 0.00375, 0.00563\n0.4782, zzz, 0.3055\n\n'
-	};
-	var DIFFCOLS_C = {
-		'inputString': '0.0025	0.4782\n0.3901\n0.00563	0.3055\n'
-	};
-	var DIFFCOLS_R = {
-		'inputString': '0.0025, 0.00375, 0.00563\n0.4782, 0.3901\n\n'
-	};
-	var NO_DELIM = {
-		'inputString': '0.0025 0.4782\n0.00375 0.3901\n0.00563 0.3055\n'
-	};
-	var NO_ROWS = {
-		'inputString': '\n\n'
-	};
-	var ONE_COL = {
-		'inputString': '0.0025|\n'
-	};
+	var BADX_C = 'abc	0.4782\n0.00375	0.3901\n0.00563	0.3055\n';
+	var BADX_R = '0.0025, 0.00375, xyz\n0.4782, 0.3901, 0.3055\n\n';
+	var BADY_C = '0.0025	0.4782\n0.00375	0.3901\n0.00563	def\n';
+	var BADY_R = '0.0025, 0.00375, 0.00563\n0.4782, zzz, 0.3055\n\n';
+	var DIFFCOLS_C = '0.0025	0.4782\n0.3901\n0.00563	0.3055\n';
+	var DIFFCOLS_R = '0.0025, 0.00375, 0.00563\n0.4782, 0.3901\n\n';
+	var NO_DELIM = '0.0025 0.4782\n0.00375 0.3901\n0.00563 0.3055\n';
+	var NO_ROWS = '\n\n';
+	var ONE_COL = '0.0025|\n';
 	var RESULTDATA = {
 		'xs': [0.0025, 0.00375, 0.00563],
 		'ys': [0.4782, 0.3901, 0.3055]
 	};
-	var THREE_ROWS = {
-		'inputString': '0.0025;0.00375;0.00563\n0.4782;0.3901;0.3055\n' +
-				'0.0025;0.00375;0.00563\n'
-	};
-	var XYCOLS = {
-		'inputString': '0.0025	0.4782\n0.00375	0.3901\n0.00563	0.3055\n'
-	};
-	var XYROWS = {
-		'inputString': '0.0025, 0.00375, 0.00563\n0.4782, 0.3901, 0.3055\n\n'
-	};
+	var THREE_ROWS = '0.0025;0.00375;0.00563\n0.4782;0.3901;0.3055\n' +
+				'0.0025;0.00375;0.00563\n';
+	var XYCOLS = '0.0025	0.4782\n0.00375	0.3901\n0.00563	0.3055\n';
+	var XYROWS = '0.0025, 0.00375, 0.00563\n0.4782, 0.3901, 0.3055\n\n';
 
 	describe('Unit tests for the "HazardCurveParser" class', function () {
 
