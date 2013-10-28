@@ -1,0 +1,13 @@
+.rtgm-graph-output {
+	.graph {
+		margin-top:16px;
+		width:95%;
+		height:275px;
+	}
+}
+
+@media print {
+	.rtgm-graph-output .page-break {
+		page-break-before: always;
+	}
+}
