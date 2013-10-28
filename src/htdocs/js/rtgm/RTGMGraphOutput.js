@@ -22,7 +22,7 @@ define([
 		drawPoints: true,
 		sigFigs: 3,
 		digitsAfterDecimal: 3,
-		yAxisLabelWidth: 85,
+		yAxisLabelWidth: 85, /* Sync with CSS dyraph-label#text-indent */
 		xRangePad: 25.0,
 		yRangePad: 25.0,
 		labelsSeparateLines: true,
@@ -100,7 +100,10 @@ define([
 			title: 'Cumulative Integral of Hazard Curve x Derivative of Fragility Curves',
 			ylabel: 'Cumulative 50-Year Collapse Probability',
 			colors: colors,
-			labels: labels
+			labels: labels,
+			ymutatefn: function (val) {
+				return 1 - Math.exp(-1.0 * val * 50);
+			}
 		});
 	};
 
@@ -167,13 +170,19 @@ define([
 
 	RTGMGraphOutput.prototype._renderGraph = function (container, xvals, yvals,
 			options) {
-		var dataStr = [], lineStr = null,
+
+		var dataStr = [], lineStr = null, fn = function (val) { return val; },
 		    i = null, numVals = xvals.length, j = null, numSets = yvals.length;
+
+		if (options.ymutatefn) {
+			fn = options.ymutatefn;
+			delete options.ymutatefn;
+		}
 
 		for (i = 0; i < numVals; i++) {
 			lineStr = [Math.log(xvals[i])];
 			for (j = 0; j < numSets; j++) {
-				lineStr.push(yvals[j][i]);
+				lineStr.push(fn(yvals[j][i]));
 			}
 			dataStr.push(lineStr.join(','));
 		}
@@ -181,166 +190,6 @@ define([
 		container.innerHTML = '';
 		new Dygraph(container, dataStr.join('\n'), Util.extend({}, GRAPH_DEFAULTS,
 			options || {}));
-	};
-
-	RTGMGraphOutput.prototype._renderPdfGraph = function (xvals, yvals) {
-
-		var labels = [], dataStr = [], lineStr = null,
-		    i = null, numVals = xvals.length, j = null, numSets = yvals.length;
-
-		for (i = 0; i < numVals; i++) {
-			lineStr = [Math.log(xvals[i])];
-			labels.push('Iteration ' + i);
-			for (j = 0; j < numSets; j++) {
-				lineStr.push(yvals[j][i]);
-			}
-			dataStr.push(lineStr.join(','));
-		}
-
-		this._pdfGraphOutput.innerHTML = '';
-		new Dygraph(this._pdfGraphOutput, dataStr.join('\n'), {
-			title: 'Derivative of Fragility Curves',
-			labels: labels,
-			ylabel: 'Conditional Collapse Probability Density',
-			xlabel: 'Spectral Response Acceleration',
-			labelsSeparateLines: true,
-			drawGrid: false,
-			sigFigs: 4,
-			yAxisLabelWidth: 85,
-			xRangePad: 1.0,
-			yRangePad: 1.0,
-			labelsDiv: this._legend,
-			axes: {
-				x: {
-					axisLabelFormatter: function (val) {
-						return Math.round(Math.exp(val)*10000)/10000;
-					},
-					valueFormatter: function (val) {
-						return Math.round(Math.exp(val)*10000)/10000;
-					}
-				}
-			}
-		});
-	};
-
-	RTGMGraphOutput.prototype._renderCdfGraph = function (xvals, yvals) {
-		var labels = [], dataStr = [], lineStr = null,
-		    i = null, numVals = xvals.length, j = null, numSets = yvals.length;
-
-		for (i = 0; i < numVals; i++) {
-			lineStr = [Math.log(xvals[i])];
-			labels.push('Iteration ' + i);
-			for (j = 0; j < numSets; j++) {
-				lineStr.push(yvals[j][i]);
-			}
-			dataStr.push(lineStr.join(','));
-		}
-
-		this._cdfGraphOutput.innerHTML = '';
-		new Dygraph(this._cdfGraphOutput, dataStr.join('\n'), {
-			title: 'Fragility Curves',
-			labels: labels,
-			ylabel: 'Conditional Probability of Collapse',
-			xlabel: 'Spectral Response Acceleration',
-			labelsSeparateLines: true,
-			drawGrid: false,
-			sigFigs: 4,
-			yAxisLabelWidth: 85,
-			xRangePad: 1.0,
-			yRangePad: 1.0,
-			labelsDiv: this._legend,
-			axes: {
-				x: {
-					axisLabelFormatter: function (val) {
-						return Math.round(Math.exp(val)*10000)/10000;
-					},
-					valueFormatter: function (val) {
-						return Math.round(Math.exp(val)*10000)/10000;
-					}
-				}
-			}
-		});
-	};
-
-	RTGMGraphOutput.prototype._renderIntegrandGraph = function (xvals, yvals) {
-		var labels = [], dataStr = [], lineStr = null,
-		    i = null, numVals = xvals.length, j = null, numSets = yvals.length;
-
-		for (i = 0; i < numVals; i++) {
-			lineStr = [Math.log(xvals[i])];
-			labels.push('Iteration ' + i);
-			for (j = 0; j < numSets; j++) {
-				lineStr.push(yvals[j][i]);
-			}
-			dataStr.push(lineStr.join(','));
-		}
-
-		this._integrandGraphOutput.innerHTML = '';
-		new Dygraph(this._integrandGraphOutput, dataStr.join('\n'), {
-			title: 'Hazard Curve x Derivative of Fragility Curve',
-			labels: labels,
-			ylabel: 'Annual Collapse Frequency Density',
-			xlabel: 'Spectral Response Acceleration',
-			labelsSeparateLines: true,
-			drawGrid: false,
-			sigFigs: 4,
-			yAxisLabelWidth: 85,
-			xRangePad: 1.0,
-			yRangePad: 1.0,
-			labelsDiv: this._legend,
-			axes: {
-				x: {
-					axisLabelFormatter: function (val) {
-						return Math.round(Math.exp(val)*10000)/10000;
-					},
-					valueFormatter: function (val) {
-						return Math.round(Math.exp(val)*10000)/10000;
-					}
-				}
-			}
-		});
-	};
-
-	RTGMGraphOutput.prototype._renderRiskGraph = function (xvals, yvals) {
-		var labels = [], dataStr = [], lineStr = null, ymin = Number.MAX_VALUE, ymax = Number.MIN_VALUE,
-		    i = null, numVals = xvals.length, j = null, numSets = yvals.length;
-
-		for (i = 0; i < numVals; i++) {
-			lineStr = [Math.log(xvals[i])];
-			labels.push('Iteration ' + i);
-			for (j = 0; j < numSets; j++) {
-				ymin = Math.min(yvals[j][i], ymin);
-				ymax = Math.max(yvals[j][i], ymax);
-				lineStr.push(yvals[j][i]);
-			}
-			dataStr.push(lineStr.join(','));
-		}
-
-		this._riskGraphOutput.innerHTML = '';
-		new Dygraph(this._riskGraphOutput, dataStr.join('\n'), {
-			title: 'Cumulative Integral of Hazard Curve x Derivative of Fragility Curve',
-			labels: labels,
-			ylabel: '50-Year Collapse Probability',
-			xlabel: 'Spectral Response Acceleration',
-			labelsSeparateLines: true,
-			drawGrid: false,
-			sigFigs: 4,
-			yAxisLabelWidth: 85,
-			labelsDiv: this._legend,
-			axes: {
-				x: {
-					axisLabelFormatter: function (val) {
-						return Math.round(Math.exp(val)*10000)/10000;
-					},
-					valueFormatter: function (val) {
-						return Math.round(Math.exp(val)*10000)/10000;
-					}
-				},
-				y: {
-					valueRange: [ymin/2, ymax+(ymax/2)],
-				}
-			}
-		});
 	};
 
 	return RTGMGraphOutput;
