@@ -4,10 +4,14 @@
 		display:block;
 		color:#333;
 	}
-	input.rtgm-input-title, textarea.rtgm-input-data {
+	input.rtgm-input-title, input.rtgm-input-sa, input.rtgm-input-afe {
 		width:100%;
+		margin-bottom:16px;
 	}
-	textarea.rtgm-input-data {
-		min-height:144px;
+	.help {
+		display:block;
+		font-size:.8em;
+		color:#666;
+		font-style:italic;
 	}
 }

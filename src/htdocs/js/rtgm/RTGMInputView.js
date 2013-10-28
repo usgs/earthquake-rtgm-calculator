@@ -3,13 +3,11 @@
 define([
 	'mvc/View',
 	'util/Util',
-	'rtgm/Curve',
-	'rtgm/HazardCurveParser'
+	'rtgm/Curve'
 ], function (
 	View,
 	Util,
-	Curve,
-	HazardCurveParser
+	Curve
 ) {
 	'use strict';
 
@@ -32,7 +30,8 @@ define([
 	 */
 	RTGMInputView.prototype._initialize = function () {
 		var titleId = this._id_prefix + 'title',
-		    inputId = this._id_prefix + 'data',
+		    saId = this._id_prefix + 'sa',
+		    afeId = this._id_prefix + 'afe',
 		    computeId = this._id_prefix + 'compute';
 
 		Util.addClass(this._el, 'rtgm-input-view');
@@ -42,15 +41,29 @@ define([
 				'<label for="', titleId, '" class="rtgm-input-title">',
 					'Curve Title',
 				'</label>',
-				'<input type="text" id="', titleId, '" class="rtgm-input-title"/>',
-				'<label for="', inputId, '" class="rtgm-input-data">Curve Data</label>',
-				'<textarea id="', inputId, '" class="rtgm-input-data"></textarea>',
-				'<button id="', computeId, '">Compute RTGM</button>',
+				'<input type="text" id="', titleId, '" class="rtgm-input-title" value=""/>',
+
+				'<label for="', saId, '" class="rtgm-input-sa">',
+					'Spectral Response Acceleration Values',
+					'<span class="help">comma-separated x-values</span>',
+				'</label>',
+				'<input type="text" id="', saId, '" class="rtgm-input-sa" value=""/>',
+
+				'<label for="', afeId, '" class="rtgm-input-afe">',
+					'Annual Frequency of Exceedance Values',
+					'<span class="help">comma-separated y-values</span>',
+				'</label>',
+				'<input type="text" id="', afeId, '" class="rtgm-input-afe" value=""/>',
+
+				'<button id="', computeId, '" class="rtgm-input-button">',
+					'Compute RTGM',
+				'</button>',
 		].join('');
 
-		this._title = this._el.querySelector('#' + titleId);
-		this._input = this._el.querySelector('#' + inputId);
-		this._compute = this._el.querySelector('#' + computeId);
+		this._title = this._el.querySelector('.rtgm-input-title');
+		this._sa = this._el.querySelector('.rtgm-input-sa');
+		this._afe = this._el.querySelector('.rtgm-input-afe');
+		this._compute = this._el.querySelector('.rtgm-input-button');
 
 		this._compute.addEventListener('click', (function (scope) {
 			return function (evt) {
@@ -63,12 +76,20 @@ define([
 	};
 
 	RTGMInputView.prototype.parseRequest = function () {
-		var data = this._input.value;
+		var title = this._title.value,
+		    sa = this._sa.value.split(','),
+		    afe = this._afe.value.split(','),
+		    curve = null;
+
 		try {
-			this.trigger('hazardCurve', {title: this._title.value,
-					curve: HazardCurveParser.parse(data)});
+			curve = new Curve({xs: sa, ys: afe});
 		} catch (ex) {
-			this.trigger('hazardCurveError', data);
+			this.trigger('hazardCurveError', {title: title, sa: sa, afe: afe,
+					ex: ex});
+		}
+
+		if (curve !== null) {
+			this.trigger('hazardCurve', {title: title, curve: curve});
 		}
 	};
 
