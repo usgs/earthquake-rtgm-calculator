@@ -16,24 +16,24 @@ define([
 
 	};
 
-  var DUMMY_LEGEND = document.createElement('div');
-
 	var GRAPH_DEFAULTS = {
 		xlabel: 'Spectral Response Acceleration',
 		drawGrid: false,
 		drawPoints: true,
-		sigFigs: 4,
+		sigFigs: 3,
+		digitsAfterDecimal: 3,
 		yAxisLabelWidth: 85,
 		xRangePad: 25.0,
 		yRangePad: 25.0,
-		labelsDiv: DUMMY_LEGEND,
+		labelsSeparateLines: true,
+		legend: 'always',
 		axes: {
 			x: {
 				axisLabelFormatter: function (val) {
-					return Math.round(Math.exp(val)*10000)/10000;
+					return Math.round(Math.exp(val)*1000)/1000;
 				},
 				valueFormatter: function (val) {
-					return Math.round(Math.exp(val)*10000)/10000;
+					return 'Spectral Response Acceleration: ' + Math.round(Math.exp(val)*1000)/1000;
 				}
 			}
 		}
@@ -75,6 +75,8 @@ define([
 			risk.push(iter.integral);
 		}
 
+		labels[labels.length - 1] = 'Final Iteration';
+
 		this._renderHazardGraph(originalMin, originalMax, sa, afe);
 		this._renderGraph(this._cdfGraphOutput, sa, cdf, {
 			title: 'Fragility Curves',
@@ -89,14 +91,14 @@ define([
 			labels: labels
 		});
 		this._renderGraph(this._integrandGraphOutput, sa, integrand, {
-			title: 'Hazard Curve x Derivative of Fragility Curve',
+			title: 'Hazard Curve x Derivative of Fragility Curves',
 			ylabel: 'Annual Collapse Frequency Density',
 			colors: colors,
 			labels: labels
 		});
 		this._renderGraph(this._riskGraphOutput, sa, risk, {
-			title: 'Cumulative Integral of Hazard Curve x Derivative of Fragility Curve',
-			ylabel: '50-Year Collapse Probability',
+			title: 'Cumulative Integral of Hazard Curve x Derivative of Fragility Curves',
+			ylabel: 'Cumulative 50-Year Collapse Probability',
 			colors: colors,
 			labels: labels
 		});
@@ -154,7 +156,7 @@ define([
 			logscale: true,
 			drawPointCallback: function (g, name, ctx, cx, cy, color, sz, idx) {
 				if (idx < oMinIdx || idx > oMaxIdx) {
-				return Dygraph.Circles.CIRCLE(g, name, ctx, cx, cy, color, sz, idx);
+					return Dygraph.Circles.CIRCLE(g, name, ctx, cx, cy, color, sz*sz*sz, idx);
 				} else {
 					return Dygraph.Circles.DEFAULT(g, name, ctx, cx, cy, color, sz, idx);
 				}

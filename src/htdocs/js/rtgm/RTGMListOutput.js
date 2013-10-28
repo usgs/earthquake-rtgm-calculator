@@ -68,13 +68,13 @@ define([
 				'</a>',
 				'<dl class="rtgm-summary">',
 					'<dt><abbr title="Uniform Hazarzd Ground Motion">UHGM</dt>',
-					'<dd>', this._formatNumber(item.get('uhgm')), '</dd>',
+					'<dd>', this._formatNumber(item.get('uhgm'), 3), '</dd>',
 
 					'<dt><abbr title="Risk Targeted Ground Motion">RTGM</dt>',
-					'<dd>', this._formatNumber(item.get('rtgm')), '</dd>',
+					'<dd>', this._formatNumber(item.get('rtgm'), 3), '</dd>',
 
 					'<dt><abbr title="Risk Coefficient">RC</dt>',
-					'<dd>', this._formatNumber(item.get('riskCoefficient')), '</dd>',
+					'<dd>', this._formatNumber(item.get('riskCoefficient'), 2), '</dd>',
 				'</dl>',
 			'</li>'
 		].join('');
