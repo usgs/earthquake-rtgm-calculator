@@ -45,8 +45,8 @@ define([
 				var constr2 = function() {
 					return new Curve();
 				};
-				expect(constr2).to.throw
-						('X and Y arrays (of the same size) are required');
+				expect(constr2).to.throw(
+						'X and Y arrays (of the same size) are required');
 			});
 		});
 	});
