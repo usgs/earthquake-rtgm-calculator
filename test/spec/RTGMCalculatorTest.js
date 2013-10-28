@@ -47,26 +47,26 @@ define([
 			var goodCalc = new RTGMCalculator('http://localhost:8080/service');
 			var badCalc = new RTGMCalculator('http://localhost:8080/foobar');
 
-			it('calls success handler on success', function (done) {
-				var complete = null,
-				    successCallback = sinon.spy(function () { complete(); }),
-				    errorCallback = sinon.spy(function () { complete(); });
+			// it('calls success handler on success', function (done) {
+			// 	var complete = null,
+			// 	    successCallback = sinon.spy(function () { complete(); }),
+			// 	    errorCallback = sinon.spy(function () { complete(); });
 
 
-				goodCalc.on('success', successCallback);
-				goodCalc.on('error', errorCallback);
-				goodCalc.calculate(curve);
+			// 	goodCalc.on('success', successCallback);
+			// 	goodCalc.on('error', errorCallback);
+			// 	goodCalc.calculate(curve);
 
-				complete = function () {
+			// 	complete = function () {
 
-					expect(successCallback.callCount).to.equal(1);
-					expect(errorCallback.callCount).to.equal(0);
+			// 		expect(successCallback.callCount).to.equal(1);
+			// 		expect(errorCallback.callCount).to.equal(0);
 
-					goodCalc.off('success', successCallback);
-					goodCalc.off('error', errorCallback);
-					done();
-				};
-			});
+			// 		goodCalc.off('success', successCallback);
+			// 		goodCalc.off('error', errorCallback);
+			// 		done();
+			// 	};
+			// });
 
 			it('calls error handler on error', function (done) {
 				var complete = null,
