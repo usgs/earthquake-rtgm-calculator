@@ -7,10 +7,10 @@ define([
 	var FoxPlazaPreload = {
 
 		load: function () {
-			var title = document.querySelector('.rtgm-input-title'),
-			    sa = document.querySelector('.rtgm-input-sa'),
-			    afe = document.querySelector('.rtgm-input-afe'),
-			    button = document.querySelector('.rtgm-input-button');
+			var title = document.querySelector('input.rtgm-input-title'),
+			    sa = document.querySelector('input.rtgm-input-sa'),
+			    afe = document.querySelector('input.rtgm-input-afe'),
+			    button = document.querySelector('button.rtgm-input-button');
 
 			title.value = 'Fox Plaza - PGA';
 			sa.value = '0.01,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.2,1.4,1.7,2';

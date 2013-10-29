@@ -60,10 +60,10 @@ define([
 				'</button>',
 		].join('');
 
-		this._title = this._el.querySelector('.rtgm-input-title');
-		this._sa = this._el.querySelector('.rtgm-input-sa');
-		this._afe = this._el.querySelector('.rtgm-input-afe');
-		this._compute = this._el.querySelector('.rtgm-input-button');
+		this._title = this._el.querySelector('input.rtgm-input-title');
+		this._sa = this._el.querySelector('input.rtgm-input-sa');
+		this._afe = this._el.querySelector('input.rtgm-input-afe');
+		this._compute = this._el.querySelector('button.rtgm-input-button');
 
 		this._compute.addEventListener('click', (function (scope) {
 			return function (evt) {
