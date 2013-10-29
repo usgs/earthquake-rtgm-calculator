@@ -33,7 +33,8 @@ define([
 					return Math.round(Math.exp(val)*1000)/1000;
 				},
 				valueFormatter: function (val) {
-					return 'Spectral Response Acceleration: ' + Math.round(Math.exp(val)*1000)/1000;
+					return 'Spectral Response Acceleration: ' +
+							Math.round(Math.exp(val)*1000)/1000;
 				}
 			}
 		}
@@ -91,13 +92,14 @@ define([
 			labels: labels
 		});
 		this._renderGraph(this._integrandGraphOutput, sa, integrand, {
-			title: 'Hazard Curve x Derivative of Fragility Curves',
+			title: 'Hazard Curve &times; Derivative of Fragility Curves',
 			ylabel: 'Annual Collapse Frequency Density',
 			colors: colors,
 			labels: labels
 		});
 		this._renderGraph(this._riskGraphOutput, sa, risk, {
-			title: 'Cumulative Integral of Hazard Curve x Derivative of Fragility Curves',
+			title: 'Cumulative Integral of Hazard Curve &times; Derivative of ' +
+					'Fragility Curves',
 			ylabel: 'Cumulative 50-Year Collapse Probability',
 			colors: colors,
 			labels: labels,
@@ -136,9 +138,20 @@ define([
 		this._collection.on('select', this.render, this);
 	};
 
-	RTGMGraphOutput.prototype._renderHazardGraph = function (oMin, oMax, xvals, yvals) {
+	RTGMGraphOutput.prototype._renderHazardGraph = function (oMin, oMax, xvals,
+				yvals) {
 		var dataStr = [], oMinIdx = 0, oMaxIdx = xvals.length,
-		    i = null, numVals = xvals.length;
+		    i = null, numVals = xvals.length, formatFn = null;
+
+		formatFn = function (val) {
+			var newVal = Math.exp(val);
+			if (newVal < 10e-4) {
+				var parts = newVal.toExponential().split('e');
+				return parts[0].substring(0, 3) + 'e' + parts[1];
+			} else {
+				return (Math.round(newVal*1000)/1000).toFixed(3);
+			}
+		};
 
 		for (i = 0; i < numVals; i++) {
 			if (xvals[i] < oMin) {
@@ -147,7 +160,7 @@ define([
 			if (xvals[i] > oMax) {
 				oMaxIdx = Math.min(oMaxIdx, i);
 			}
-			dataStr.push([Math.log(xvals[i]), yvals[i]].join(','));
+			dataStr.push([Math.log(xvals[i]), Math.log(yvals[i])].join(','));
 		}
 
 		this._hazardGraphOutput.innerHTML = '';
@@ -156,14 +169,20 @@ define([
 			title: 'Hazard Curve',
 			labels: ['SA', 'AFE'],
 			ylabel: 'Annual Frequence of Exceedance',
-			logscale: true,
+			digitsAfterDecimal: 4,
 			drawPointCallback: function (g, name, ctx, cx, cy, color, sz, idx) {
 				if (idx < oMinIdx || idx > oMaxIdx) {
-					return Dygraph.Circles.CIRCLE(g, name, ctx, cx, cy, color, sz*sz*sz, idx);
+					return Dygraph.Circles.CIRCLE(g, name, ctx, cx, cy, color, 2*sz, idx);
 				} else {
 					return Dygraph.Circles.DEFAULT(g, name, ctx, cx, cy, color, sz, idx);
 				}
 			},
+			axes: Util.extend({}, GRAPH_DEFAULTS.axes, {
+				y: {
+					axisLabelFormatter: formatFn,
+					valueFormatter: formatFn
+				}
+			}),
 			colors: ['#000000']
 		}));
 	};
