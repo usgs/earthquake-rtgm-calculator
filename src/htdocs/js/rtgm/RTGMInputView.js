@@ -51,7 +51,7 @@ define([
 				'</label>',
 				'<input type="text" id="', saId, '" class="rtgm-input-sa" value=""/>',
 				'<label for="', xunId, '" class="rtgm-input-xun">',
-					'Enter X units in gs or %gs',
+					'Enter X units in g or %g',
 				'</label>',
 			/*	'<input type="text" id="', xunId, '" class="rtgm-input-xun" value=""/>', */
 			    '<input type="radio"  id="', xunId, '" class="rtgm-input-xun" checked="checked" name="xunits" value="g">g</input>',
