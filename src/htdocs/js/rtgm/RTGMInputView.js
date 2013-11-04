@@ -31,6 +31,8 @@ define([
 	RTGMInputView.prototype._initialize = function () {
 		var titleId = this._id_prefix + 'title',
 		    saId = this._id_prefix + 'sa',
+		    xunId = this._id_prefix + 'xun',
+		    xunPct = this._id_prefix + 'xunPct',
 		    afeId = this._id_prefix + 'afe',
 		    computeId = this._id_prefix + 'compute';
 
@@ -48,12 +50,19 @@ define([
 					'<span class="help">comma-separated x-values</span>',
 				'</label>',
 				'<input type="text" id="', saId, '" class="rtgm-input-sa" value=""/>',
+				'<label for="', xunId, '" class="rtgm-input-xun">',
+					'Enter X units in gs or %gs',
+				'</label>',
+			/*	'<input type="text" id="', xunId, '" class="rtgm-input-xun" value=""/>', */
+			    '<input type="radio"  id="', xunId, '" class="rtgm-input-xun" checked="checked" name="xunits" value="g">g</input>',
+			    '<input type="radio"  id="', xunPct, '" class="rtgm-input-xunPct" name="xunits" value="%g">%g</input>',
 
 				'<label for="', afeId, '" class="rtgm-input-afe">',
 					'Annual Frequency of Exceedance Values',
 					'<span class="help">comma-separated y-values</span>',
 				'</label>',
 				'<input type="text" id="', afeId, '" class="rtgm-input-afe" value=""/>',
+				
 
 				'<button id="', computeId, '" class="rtgm-input-button">',
 					'Compute RTGM',
@@ -62,6 +71,8 @@ define([
 
 		this._title = this._el.querySelector('input.rtgm-input-title');
 		this._sa = this._el.querySelector('input.rtgm-input-sa');
+		this._xun = this._el.querySelector('input.rtgm-input-xun');
+		this._xunPct = this._el.querySelector('input.rtgm-input-xunPct');
 		this._afe = this._el.querySelector('input.rtgm-input-afe');
 		this._compute = this._el.querySelector('button.rtgm-input-button');
 
@@ -77,19 +88,26 @@ define([
 
 	RTGMInputView.prototype.parseRequest = function () {
 		var title = this._title.value,
+		    xunits = this._xun.value,
 		    sa = this._sa.value.split(','),
 		    afe = this._afe.value.split(','),
 		    curve = null;
 
+		if ( this._xun.checked === true){
+			xunits = this._xun.value;
+		}
+		else{
+			xunits = this._xunPct.value;
+		}
 		try {
-			curve = new Curve({xs: sa, ys: afe});
+			curve = new Curve({xs: sa, ys: afe });
 		} catch (ex) {
 			this.trigger('hazardCurveError', {title: title, sa: sa, afe: afe,
 					ex: ex});
 		}
 
 		if (curve !== null) {
-			this.trigger('hazardCurve', {title: title, curve: curve});
+			this.trigger('hazardCurve', {title: title, curve: curve, xunits: xunits});
 		}
 	};
 
