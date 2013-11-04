@@ -29,8 +29,7 @@ define([
 	};
 	RTGMCalculator.prototype = Object.create(Events.prototype);
 
-	RTGMCalculator.prototype.calculate = function (curve, title) {
-
+	RTGMCalculator.prototype.calculate = function (curve, title, xunits) {
 		var _this = this,
 		    script = document.createElement('script'),
 		    uniqueCallback = __json_callback(),
@@ -55,10 +54,10 @@ define([
 			if (data.status === 200) {
 				attrs = Util.extend({}, data.rtgm, {
 					title: title,
+					xunits: xunits,  
 					id: (new Date()).getTime(),
 					url: script.src.replace('/' + uniqueCallback, '')
 				});
-
 				_this.trigger('success', new Model(attrs));
 			} else {
 				_this.trigger('error', data);
