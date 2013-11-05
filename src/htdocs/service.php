@@ -47,7 +47,7 @@
 	// Basic input validation
 	if (sizeof($xs) != sizeof($ys)) {
 		jsonResponse(array(
-			'error' => 'x and Y must be the same size.',
+			'error' => 'X and Y must be the same size.',
 			'status' => 400
 			), $callback);
 		exit();
