@@ -54,7 +54,7 @@ define([
 			if (data.status === 200) {
 				attrs = Util.extend({}, data.rtgm, {
 					title: title,
-					xunits: xunits,  
+					xunits: xunits,
 					id: (new Date()).getTime(),
 					url: script.src.replace('/' + uniqueCallback, '')
 				});
