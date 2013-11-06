@@ -21,14 +21,11 @@ define([
 		if ((attributes.xs.length || attributes.ys.length) < 2){
 			throw 'X and Y arrays require at least 2 values.';
 		}
-		//Check X array for empty element		
-		for (i = 0; i < attributes.xs.length; i++){
-                        if (attributes.xs[i] === ''){
-                                throw 'X values require a numerical value after each comma.';
-                        }
-                }
-		//Check Y array for empty element
+		//Check X and Y values for values after each
 		for (i = 0; i < attributes.ys.length; i++){
+			if (attributes.xs[i] === ''){
+				throw 'X values require a numerical value after earch comma.';
+			}
 			if (attributes.ys[i] === ''){
 				throw 'Y values require a numerical value after each comma.';
 			}
