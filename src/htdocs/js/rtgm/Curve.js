@@ -24,12 +24,18 @@ define([
 		//Check X and Y values for values after each
 		for (i = 0; i < attributes.ys.length; i++){
 			if (attributes.xs[i] === ''){
-				throw 'X values require a numerical value after earch comma.';
+				throw 'X array require a numerical value after earch comma.';
 			}
 			if (attributes.ys[i] === ''){
-				throw 'Y values require a numerical value after each comma.';
+				throw 'Y array require a numerical value after each comma.';
 			}
-		}
+			if (! isFinite(attributes.xs[i])){
+                                throw 'X array values must be numerical.';
+                        }
+                        if (! isFinite(attributes.ys[i])){
+                                throw 'Y array values must be numerical.';
+                        }
+                }
 		for (i = 0, len = attributes.xs.length; i < len; i++) {
 			attributes.xs[i] = parseFloat(attributes.xs[i]);
 			attributes.ys[i] = parseFloat(attributes.ys[i]);
