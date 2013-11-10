@@ -10,17 +10,13 @@ define([
 	Curve
 ) {
 	'use strict';
-
 	var INPUT_VIEW_COUNTER = 0;
 	var DEFAULTS = {
-
 	};
 
 	var RTGMInputView = function (options) {
 		options = Util.extend({}, DEFAULTS, options);
-
 		this._id_prefix = 'rtgm-input-view-' + (INPUT_VIEW_COUNTER++) + '-';
-
 		View.call(this, options);
 	};
 	RTGMInputView.prototype = Object.create(View.prototype);
@@ -44,27 +40,26 @@ define([
 					'Curve Title',
 				'</label>',
 				'<input type="text" id="', titleId, '" class="rtgm-input-title" value=""/>',
-
 				'<label for="', saId, '" class="rtgm-input-sa">',
 					'Spectral Response Acceleration Values',
 					'<span class="help">comma-separated x-values</span>',
 				'</label>',
 				'<input type="text" id="', saId, '" class="rtgm-input-sa" value=""/>',
-				'<label for="', xunId, '" class="rtgm-input-xun">',
-					'Units',
+		        '<label>',
+					'Spectral Response Acceleration Units',
 					'<span class="help">Select units for x-values</span>',
 				'</label>',
-			/*	'<input type="text" id="', xunId, '" class="rtgm-input-xun" value=""/>', */
-			    '<input type="radio"  id="', xunId, '" class="rtgm-input-xun" checked="checked" name="xunits" value="g">g</input>',
-			    '<input type="radio"  id="', xunPct, '" class="rtgm-input-xunPct" name="xunits" value="%g">%g</input>',
-
+				'<label for="', xunId, '" class="rtgminput-xun">',
+			        '<input type="radio"  id="', xunId, '" class="rtgm-input-xun" checked="checked" name="xunits" value="g"/>',
+			     'g</label>',
+			      '<label for="', xunPct, '" class="rtgminput-xunPct">',
+			        '<input type="radio"  id="', xunPct, '" class="rtgm-input-xunPct" name="xunits" value="%g"/>',
+			      '%g</label>',
 				'<label for="', afeId, '" class="rtgm-input-afe">',
 					'Annual Frequency of Exceedance Values',
 					'<span class="help">comma-separated y-values</span>',
 				'</label>',
 				'<input type="text" id="', afeId, '" class="rtgm-input-afe" value=""/>',
-				
-
 				'<button id="', computeId, '" class="rtgm-input-button">',
 					'Compute RTGM',
 				'</button>',
@@ -94,23 +89,20 @@ define([
 		    afe = this._afe.value.split(','),
 		    curve = null;
 
-		if ( this._xun.checked === true){
+		if (this._xun.checked === true) {
 			xunits = this._xun.value;
-		}
-		else{
+		} else {
 			xunits = this._xunPct.value;
 		}
 		try {
 			curve = new Curve({xs: sa, ys: afe });
 		} catch (ex) {
 			this.trigger('hazardCurveError', {title: title, sa: sa, afe: afe,
-					ex: ex});
+				ex: ex});
 		}
-
 		if (curve !== null) {
 			this.trigger('hazardCurve', {title: title, curve: curve, xunits: xunits});
 		}
 	};
-
 	return RTGMInputView;
 });

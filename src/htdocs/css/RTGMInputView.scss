@@ -4,24 +4,29 @@
 		display:block;
 		color:#333;
 	}
+	label.rtgminput-xun{
+		display:inline;
+		width:20%;
+	}
+    label.rtgminput-xunPct{
+    	display:inline;
+		width:20%;
+		margin-left:20px;
+	}
+	
 	input.rtgm-input-title, input.rtgm-input-afe {
 		width:100%;
 		margin-bottom:16px;
 	}
 	input.rtgm-input-sa {
 		width:100%;
-		margin-bottom:5px;
+		margin-bottom:16px;
 	}
 	input.rtgm-input-xun{
-	    width:3%;
-	    margin-bottom:16px;
-
+		margin-bottom:16px;	
 	}
 	input.rtgm-input-xunPct{
-	    width:3%;
-	    margin-bottom:16px;
-	    margin-left:30px;
-	    padding-left:10px;
+		margin-bottom:16px;
 	}
 	.help {
 		display:block;
