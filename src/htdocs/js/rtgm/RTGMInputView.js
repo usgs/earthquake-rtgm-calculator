@@ -80,8 +80,12 @@ define([
 		    sa = this._sa.value.split(','),
 		    afe = this._afe.value.split(','),
 		    curve = null;
-
 		try {
+			var i;
+			for (i = 0; i < sa.length; i++){
+				sa[i] = parseFloat(sa[i]);
+				afe[i] = parseFloat(afe[i]);
+			}
 			curve = new Curve({xs: sa, ys: afe});
 		} catch (ex) {
 			this.trigger('hazardCurveError', {title: title, sa: sa, afe: afe,
