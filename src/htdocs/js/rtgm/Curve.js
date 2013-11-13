@@ -12,35 +12,28 @@ define([
 	};
 
 	var Curve = function (attributes) {
-		var i = null, len = null;
-		// check the array sizes
+		var i = null;//, len = null;
+		// Check that array sizes are the same size
 		if (!attributes || (attributes.xs.length !== attributes.ys.length)) {
 			throw 'X and Y arrays (of the same size) are required.';
 		}
-		// check if x and y arrays are less than 2 values
+		// Check if x and y arrays are less than 2 values
 		if ((attributes.xs.length || attributes.ys.length) < 2){
 			throw 'X and Y arrays require at least 2 values.';
 		}
-		//Check X and Y values for values after each
+		//Check if X and Y are numerical values
 		for (i = 0; i < attributes.ys.length; i++){
-			if (attributes.xs[i] === ''){
-				throw 'X array require a numerical value after earch comma.';
+			if (isNaN(attributes.xs[i]) || isNaN(attributes.ys[i])){
+				throw 'X and Y values must be numerical.';
 			}
-			if (attributes.ys[i] === ''){
-				throw 'Y array require a numerical value after each comma.';
-			}
-			if (! isFinite(attributes.xs[i])){
-                                throw 'X array values must be numerical.';
-                        }
-                        if (! isFinite(attributes.ys[i])){
-                                throw 'Y array values must be numerical.';
-                        }
-                }
-		for (i = 0, len = attributes.xs.length; i < len; i++) {
-			attributes.xs[i] = parseFloat(attributes.xs[i]);
-			attributes.ys[i] = parseFloat(attributes.ys[i]);
 		}
-		// Call parent constructor
+		/*I am not so sure that this for loop is needed. 
+		*for (i = 0, len = attributes.xs.length; i < len; i++) {
+		*	attributes.xs[i] = parseFloat(attributes.xs[i]);
+		*	attributes.ys[i] = parseFloat(attributes.ys[i]);
+		*}
+		* Call parent constructor
+		*/
 		Model.call(this, Util.extend({}, DEFAULTS, attributes));
 	};
 
