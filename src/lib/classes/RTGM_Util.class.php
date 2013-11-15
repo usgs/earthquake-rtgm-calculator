@@ -163,6 +163,11 @@ class RTGM_Util {
 	 * @return the interpolated y-value
 	 */
 	public static function findY ($x1, $y1, $x2, $y2, $x) {
+		//fix dividing by zero
+		//if (($x2 - $x1) <= 0){
+		//	return 0;
+		//}
+
 		return $y1 + ($x - $x1) * ($y2 - $y1) / ($x2 - $x1);
 	}
 
@@ -190,7 +195,8 @@ class RTGM_Util {
 		}
 		$dev = log($x) - $mean;
 		if (abs($dev) > 40 * $std) {
-			return dev < 0 ? 0.0 : 1.0;
+		//added $ to dev
+			return $dev < 0 ? 0.0 : 1.0;
 		}
 		return 0.5 + 0.5 * Statistics::erf($dev / ($std * sqrt(2.0)));
 	}
