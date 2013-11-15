@@ -12,9 +12,9 @@ define([
 	};
 
 	var Curve = function (attributes) {
-		var i = null;
+		var i = null; var previous = null;
 		// Check that array sizes are the same size
-		if (!attributes || (attributes.xs.length !== attributes.ys.length)) {
+		if (!attributes || (attributes.xs.length !== attributes.ys.length)){
 			throw 'X and Y arrays (of the same size) are required.';
 		}
 		// Check if x and y arrays are less than 2 values
@@ -26,6 +26,10 @@ define([
 			if (isNaN(attributes.xs[i]) || isNaN(attributes.ys[i])){
 				throw 'X and Y values must be numerical.';
 			}
+			if (previous !== null && attributes.ys[i] >= previous){
+				throw 'Y values must be in descending order.';
+			}
+			previous = attributes.ys[i];
 		}
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, attributes));
