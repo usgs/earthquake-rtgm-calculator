@@ -66,7 +66,7 @@ define([
 	};
 
 	RTGMApplication.prototype._handleError = function (error) {
-		console.log(error);
+	//	console.log(error);
 		new ModalView(error.ex, {classes: ['modal-error'], title: 'Error'}).show();
 	};
 
