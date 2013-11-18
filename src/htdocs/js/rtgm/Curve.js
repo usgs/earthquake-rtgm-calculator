@@ -17,7 +17,8 @@ define([
 				previousX = null,
 				len = null;
 			// Check that array sizes are the same size
-			if (!attributes || (attributes.xs.length !== attributes.ys.length)) {
+			if (!attributes || !attributes.xs || !attributes.ys ||
+					(attributes.xs.length !== attributes.ys.length)) {
 				throw 'X and Y arrays (of the same size) are required.';
 			}
 			// Check if x and y arrays are less than 2 values
