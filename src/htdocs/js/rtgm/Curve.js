@@ -40,7 +40,6 @@ define([
 		// Call parent constructor
 		Model.call(this, Util.extend({}, DEFAULTS, attributes));
 	};
-
 	Curve.prototype = Object.create(Model.prototype);
 
 	return Curve;
