@@ -82,10 +82,10 @@ define([
 		    curve = null;
 		try {
 			var i;
-			for (i = 0; i < sa.length; i++){
+			for (i = 0; i < sa.length; i++) {
 				sa[i] = parseFloat(sa[i]);
 			}
-			for (i = 0; i < afe.length; i++){
+			for (i = 0; i < afe.length; i++) {
 				afe[i] = parseFloat(afe[i]);
 			}
 			curve = new Curve({xs: sa, ys: afe});
