@@ -13,9 +13,9 @@ define([
 
 	var Curve = function (attributes) {
 		var i = null,
-				previousY = null,
-				previousX = null,
-				len = null;
+		    previousY = null,
+		    previousX = null,
+		    len = null;
 			// Check that array sizes are the same size
 			if (!attributes || !attributes.xs || !attributes.ys ||
 					(attributes.xs.length !== attributes.ys.length)) {
