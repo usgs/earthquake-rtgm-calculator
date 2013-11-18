@@ -190,7 +190,6 @@ class RTGM_Util {
 		}
 		$dev = log($x) - $mean;
 		if (abs($dev) > 40 * $std) {
-		//added $ to dev
 			return $dev < 0 ? 0.0 : 1.0;
 		}
 		return 0.5 + 0.5 * Statistics::erf($dev / ($std * sqrt(2.0)));
