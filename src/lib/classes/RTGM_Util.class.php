@@ -163,11 +163,6 @@ class RTGM_Util {
 	 * @return the interpolated y-value
 	 */
 	public static function findY ($x1, $y1, $x2, $y2, $x) {
-		//fix dividing by zero
-		//if (($x2 - $x1) <= 0){
-		//	return 0;
-		//}
-
 		return $y1 + ($x - $x1) * ($y2 - $y1) / ($x2 - $x1);
 	}
 
