@@ -2,6 +2,7 @@
 define([
 	'util/Util',
 	'mvc/Collection',
+	'mvc/ModalView',
 
 	'rtgm/RTGMCalculator',
 	'rtgm/RTGMInputView',
@@ -10,6 +11,7 @@ define([
 ], function (
 	Util,
 	Collection,
+	ModalView,
 
 	RTGMCalculator,
 	RTGMInputView,
@@ -64,7 +66,7 @@ define([
 	};
 
 	RTGMApplication.prototype._handleError = function (error) {
-		console.log('todo::rtgmapplication#_hazardInputError' + error);
+		new ModalView(error.ex, {classes: ['modal-error'], title: 'Error'}).show();
 	};
 
 	return RTGMApplication;
