@@ -36,33 +36,35 @@ define([
 
                 // build the view skeleton
                 this._el.innerHTML = [
-                                '<label for="', titleId, '" class="rtgm-input-title">',
-                                        'Curve Title',
-                                '</label>',
-                                '<input type="text" id="', titleId, '" class="rtgm-input-title" value=""/>',
-                                '<label for="', saId, '" class="rtgm-input-sa">',
-                                        'Spectral Response Acceleration Values',
-                                        '<span class="help">comma-separated x-values</span>',
-                                '</label>',
-                                '<input type="text" id="', saId, '" class="rtgm-input-sa" value=""/>',
-                 '<label>',
-                                        'Spectral Response Acceleration Units',
-                                        '<span class="help">Select units for x-values</span>',
-                                '</label>',
-                                '<label for="', xunId, '" class="rtgminput-xun">',
-                         '<input type="radio" id="', xunId, '" class="rtgm-input-xun" checked="checked" name="xunits" value="g"/>',
-                         'g</label>',
-                         '<label for="', xunPct, '" class="rtgminput-xunPct">',
-                         '<input type="radio" id="', xunPct, '" class="rtgm-input-xunPct" name="xunits" value="%g"/>',
-                         '%g</label>',
-                                '<label for="', afeId, '" class="rtgm-input-afe">',
-                                        'Annual Frequency of Exceedance Values',
-                                        '<span class="help">comma-separated y-values</span>',
-                                '</label>',
-                                '<input type="text" id="', afeId, '" class="rtgm-input-afe" value=""/>',
-                                '<button id="', computeId, '" class="rtgm-input-button">',
-                                        'Compute RTGM',
-                                '</button>',
+                    '<label for="', titleId, '" class="rtgm-input-title">',
+                        'Curve Title',
+                    '</label>',
+                    '<input type="text" id="', titleId, '" class="rtgm-input-title" value=""/>',
+                    '<label for="', saId, '" class="rtgm-input-sa">',
+                        'Spectral Response Acceleration Values',
+                         '<span class="help">comma-separated x-values</span>',
+                    '</label>',
+                    '<input type="text" id="', saId, '" class="rtgm-input-sa" value=""/>',
+                    '<label>',
+                        'Spectral Response Acceleration Units',
+                        '<span class="help">Select units for x-values</span>',
+                    '</label>',
+                    '<label for="', xunId, '" class="rtgminput-xun">',
+                        '<input type="radio" id="', xunId,
+                        '" class="rtgm-input-xun" checked="checked" name="xunits" value="g"/>',
+                    'g</label>',
+                    '<label for="', xunPct, '" class="rtgminput-xunPct">',
+                        '<input type="radio" id="', xunPct,
+                        '" class="rtgm-input-xunPct" name="xunits" value="%g"/>',
+                    '%g</label>',
+                    '<label for="', afeId, '" class="rtgm-input-afe">',
+                        'Annual Frequency of Exceedance Values',
+                        '<span class="help">comma-separated y-values</span>',
+                    '</label>',
+                    '<input type="text" id="', afeId, '" class="rtgm-input-afe" value=""/>',
+                    '<button id="', computeId, '" class="rtgm-input-button">',
+                        'Compute RTGM',
+                    '</button>',
                 ].join('');
 
                 this._title = this._el.querySelector('input.rtgm-input-title');
@@ -81,7 +83,7 @@ define([
                 // render the view
                 this.render();
         };
-        
+
         RTGMInputView.prototype.parseRequest = function () {
                 var title = this._title.value,
                  xunits = this._xun.value,
