@@ -26,11 +26,11 @@ define([
          */
         RTGMInputView.prototype._initialize = function () {
                 var titleId = this._id_prefix + 'title',
-                 saId = this._id_prefix + 'sa',
-                 xunId = this._id_prefix + 'xun',
-                 xunPct = this._id_prefix + 'xunPct',
-                 afeId = this._id_prefix + 'afe',
-                 computeId = this._id_prefix + 'compute';
+                  saId = this._id_prefix + 'sa',
+                  xunId = this._id_prefix + 'xun',
+                  xunPct = this._id_prefix + 'xunPct',
+                  afeId = this._id_prefix + 'afe',
+                  computeId = this._id_prefix + 'compute';
 
                 Util.addClass(this._el, 'rtgm-input-view');
 
@@ -86,24 +86,24 @@ define([
 
         RTGMInputView.prototype.parseRequest = function () {
                 var title = this._title.value,
-                 xunits = this._xun.value,
-                 sa = this._sa.value.split(','),
-                 afe = this._afe.value.split(','),
-                 curve = null;
+                  xunits = this._xun.value,
+                  sa = this._sa.value.split(','),
+                  afe = this._afe.value.split(','),
+                  curve = null;
 
                 if (this._xun.checked === true) {
-                        xunits = this._xun.value;
+                    xunits = this._xun.value;
                 } else {
-                        xunits = this._xunPct.value;
+                    xunits = this._xunPct.value;
                 }
                 try {
-                        curve = new Curve({xs: sa, ys: afe });
+                    curve = new Curve({xs: sa, ys: afe });
                 } catch (ex) {
-                        this.trigger('hazardCurveError', {title: title, sa: sa, afe: afe,
-                                ex: ex});
+                    this.trigger('hazardCurveError', {title: title, sa: sa, afe: afe,
+                        ex: ex});
                 }
                 if (curve !== null) {
-                        this.trigger('hazardCurve', {title: title, curve: curve, xunits: xunits});
+                    this.trigger('hazardCurve', {title: title, curve: curve, xunits: xunits});
                 }
         };
         return RTGMInputView;
