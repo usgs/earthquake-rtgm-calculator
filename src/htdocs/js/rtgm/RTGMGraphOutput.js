@@ -59,7 +59,6 @@ define([
 
 	RTGMGraphOutput.prototype.render = function (item) {
 		var xlabelUnits =  GRAPH_DEFAULTS.xlabel + '(' + item.get('xunits') + ')';
-		
 		var iterations = item.get('iterations'),
 		    sa = item.get('upsampledHazardCurve').xs,
 		    afe = item.get('upsampledHazardCurve').ys,
