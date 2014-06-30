@@ -18,7 +18,7 @@ define([
 
 	var GRAPH_DEFAULTS = {
 		xlabel: 'Spectral Response Acceleration',
-		drawGrid: false,
+		drawGrid: true,
 		drawPoints: true,
 		sigFigs: 3,
 		digitsAfterDecimal: 3,
