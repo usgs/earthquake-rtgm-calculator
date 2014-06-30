@@ -67,10 +67,10 @@ define([
 						'class="rtgm-list-download">Raw Data Results</a>',
 				'<dl class="rtgm-summary">',
 					'<dt><abbr title="Uniform Hazard Ground Motion">UHGM</dt>',
-					'<dd>', this._formatNumber(item.get('uhgm'), 3).toFixed(3), '</dd>',
+					'<dd>', this._formatNumber(item.get('uhgm'), 3).toFixed(3), 'g</dd>',
 
 					'<dt><abbr title="Risk Targeted Ground Motion">RTGM</dt>',
-					'<dd>', this._formatNumber(item.get('rtgm'), 3).toFixed(3), '</dd>',
+					'<dd>', this._formatNumber(item.get('rtgm'), 3).toFixed(3), 'g</dd>',
 
 					'<dt><abbr title="Risk Coefficient">RC</dt>',
 					'<dd>', this._formatNumber(item.get('riskCoefficient'), 2).toFixed(2), '</dd>',

@@ -40,7 +40,7 @@ define([
 	};
 
 	var GRAPH_DEFAULTS = {
-		xlabel: 'Spectral Response Acceleration',
+		xlabel: 'Spectral Response Acceleration (g)',
 		drawGrid: false,
 		drawPoints: true,
 		sigFigs: 3,
