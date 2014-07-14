@@ -6,7 +6,7 @@
 	}
 	.dygraph-xlabel, .dygraph-title {
 		// Must manually sync this with dygraph.options.yAxisLabelWidth
-		text-indent: 85px;
+		text-indent: 100px;
 	}
 	// dygraph doesn't support moving legend, sucky to use !important, but what
 	// are the alternatives?

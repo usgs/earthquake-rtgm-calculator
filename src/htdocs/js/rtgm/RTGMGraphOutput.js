@@ -16,13 +16,33 @@ define([
 
 	};
 
+	var sciNote = function (val, suppressCoefficient) {
+		var parts = val.toExponential().split('e'),
+		    formatted = '';
+
+		if (!suppressCoefficient) {
+			formatted = parseFloat(parts[0]).toFixed(1);
+		}
+
+		if (parts.length > 1) {
+			formatted += '&times;10<sup>' + parts[1] + '</sup>';
+		}
+
+		if (formatted !== '') {
+			return formatted;
+		} else {
+			return val;
+		}
+	};
+
 	var GRAPH_DEFAULTS = {
 		xlabel: 'Spectral Response Acceleration',
 		drawGrid: false,
 		drawPoints: true,
 		sigFigs: 3,
 		digitsAfterDecimal: 3,
-		yAxisLabelWidth: 85, /* Sync with CSS dyraph-label#text-indent */
+		xAxisLabelWidth: 75,
+		yAxisLabelWidth: 100, /* Sync with CSS dyraph-label#text-indent */
 		xRangePad: 25.0,
 		yRangePad: 25.0,
 		labelsSeparateLines: true,
@@ -95,7 +115,16 @@ define([
 			title: 'Hazard Curve &times; Derivative of Fragility Curves',
 			ylabel: 'Annual Collapse Frequency Density',
 			colors: colors,
-			labels: labels
+			labels: labels,
+			axes: {
+				x: GRAPH_DEFAULTS.axes.x,
+				y: {
+					axisLabelFormatter: sciNote,
+					valueFormatter: function (val) {
+						return sciNote(val);
+					}
+				}
+			}
 		});
 		this._renderGraph(this._riskGraphOutput, sa, risk, {
 			title: 'Cumulative Integral of Hazard Curve &times; Derivative of ' +
@@ -103,6 +132,15 @@ define([
 			ylabel: 'Cumulative 50-Year Collapse Probability',
 			colors: colors,
 			labels: labels,
+			axes: {
+				x: GRAPH_DEFAULTS.axes.x,
+				y: {
+					axisLabelFormatter: sciNote,
+					valueFormatter: function (val) {
+						return sciNote(val);
+					}
+				}
+			},
 			ymutatefn: function (val) {
 				return 1 - Math.exp(-1.0 * val * 50);
 			}
@@ -141,17 +179,7 @@ define([
 	RTGMGraphOutput.prototype._renderHazardGraph = function (oMin, oMax, xvals,
 				yvals) {
 		var dataStr = [], oMinIdx = 0, oMaxIdx = xvals.length,
-		    i = null, numVals = xvals.length, formatFn = null;
-
-		formatFn = function (val) {
-			var newVal = Math.exp(val);
-			if (newVal < 10e-4) {
-				var parts = newVal.toExponential().split('e');
-				return parts[0].substring(0, 3) + 'e' + parts[1];
-			} else {
-				return (Math.round(newVal*1000)/1000).toFixed(3);
-			}
-		};
+		    i = null, numVals = xvals.length;
 
 		for (i = 0; i < numVals; i++) {
 			if (xvals[i] < oMin) {
@@ -179,8 +207,12 @@ define([
 			},
 			axes: Util.extend({}, GRAPH_DEFAULTS.axes, {
 				y: {
-					axisLabelFormatter: formatFn,
-					valueFormatter: formatFn
+					axisLabelFormatter: function (val) {
+						return sciNote(Math.exp(val), true);
+					},
+					valueFormatter: function (val) {
+						return sciNote(Math.exp(val));
+					}
 				}
 			}),
 			colors: ['#000000']
