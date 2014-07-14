@@ -4,8 +4,27 @@
 		display:block;
 		color:#333;
 	}
-	input.rtgm-input-title, input.rtgm-input-sa, input.rtgm-input-afe {
+	label.rtgminput-xun {
+		display:inline;
+		width:20%;
+	}
+    label.rtgminput-xunPct {
+    	display:inline;
+		width:20%;
+		margin-left:20px;
+	}
+	input.rtgm-input-title, input.rtgm-input-afe {
 		width:100%;
+		margin-bottom:16px;
+	}
+	input.rtgm-input-sa {
+		width:100%;
+		margin-bottom:16px;
+	}
+	input.rtgm-input-xun {
+		margin-bottom:16px;
+	}
+	input.rtgm-input-xunPct {
 		margin-bottom:16px;
 	}
 	.help {

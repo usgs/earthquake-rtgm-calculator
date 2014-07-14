@@ -58,7 +58,7 @@ define([
 	};
 
 	RTGMApplication.prototype.computeHazard = function (evt) {
-		this._calculator.calculate(evt.curve, evt.title);
+		this._calculator.calculate(evt.curve, evt.title, evt.xunits);
 	};
 
 	RTGMApplication.prototype._rtgmSuccess = function (rtgm) {

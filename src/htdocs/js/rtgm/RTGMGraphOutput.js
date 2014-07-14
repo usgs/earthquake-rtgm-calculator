@@ -17,7 +17,7 @@ define([
 	};
 
 	var GRAPH_DEFAULTS = {
-		xlabel: 'Spectral Response Acceleration',
+		xlabel: 'Spectral Response Acceleration ',
 		drawGrid: false,
 		drawPoints: true,
 		sigFigs: 3,
@@ -58,6 +58,7 @@ define([
 	RTGMGraphOutput.prototype = Object.create(View.prototype);
 
 	RTGMGraphOutput.prototype.render = function (item) {
+		var xlabelUnits =  GRAPH_DEFAULTS.xlabel + '(' + item.get('xunits') + ')';
 		var iterations = item.get('iterations'),
 		    sa = item.get('upsampledHazardCurve').xs,
 		    afe = item.get('upsampledHazardCurve').ys,
@@ -78,22 +79,25 @@ define([
 
 		labels[labels.length - 1] = 'Final Iteration';
 
-		this._renderHazardGraph(originalMin, originalMax, sa, afe);
+		this._renderHazardGraph(originalMin, originalMax, sa, afe, xlabelUnits);
 		this._renderGraph(this._cdfGraphOutput, sa, cdf, {
 			title: 'Fragility Curves',
 			ylabel: 'Conditional Collapse Probability',
+			xlabel: xlabelUnits ,
 			colors: colors,
 			labels: labels
 		});
 		this._renderGraph(this._pdfGraphOutput, sa, pdf, {
 			title: 'Derivative of Fragility Curves',
 			ylabel: 'Conditional Collapse Probability Density',
+			xlabel: xlabelUnits,
 			colors: colors,
 			labels: labels
 		});
 		this._renderGraph(this._integrandGraphOutput, sa, integrand, {
 			title: 'Hazard Curve &times; Derivative of Fragility Curves',
 			ylabel: 'Annual Collapse Frequency Density',
+			xlabel: xlabelUnits,
 			colors: colors,
 			labels: labels
 		});
@@ -101,6 +105,7 @@ define([
 			title: 'Cumulative Integral of Hazard Curve &times; Derivative of ' +
 					'Fragility Curves',
 			ylabel: 'Cumulative 50-Year Collapse Probability',
+			xlabel: xlabelUnits,
 			colors: colors,
 			labels: labels,
 			ymutatefn: function (val) {
@@ -139,7 +144,7 @@ define([
 	};
 
 	RTGMGraphOutput.prototype._renderHazardGraph = function (oMin, oMax, xvals,
-				yvals) {
+				yvals, xlabel) {
 		var dataStr = [], oMinIdx = 0, oMaxIdx = xvals.length,
 		    i = null, numVals = xvals.length, formatFn = null;
 
@@ -168,6 +173,7 @@ define([
 			GRAPH_DEFAULTS, {
 			title: 'Hazard Curve',
 			labels: ['SA', 'AFE'],
+			xlabel: xlabel,
 			ylabel: 'Annual Frequence of Exceedance',
 			digitsAfterDecimal: 4,
 			drawPointCallback: function (g, name, ctx, cx, cy, color, sz, idx) {
