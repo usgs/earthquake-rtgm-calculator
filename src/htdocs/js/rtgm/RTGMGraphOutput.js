@@ -22,10 +22,14 @@ define([
 
 		if (!suppressCoefficient) {
 			formatted = parseFloat(parts[0]).toFixed(1);
+
+			if (parts.length > 1) {
+				formatted += '&times;';
+			}
 		}
 
 		if (parts.length > 1) {
-			formatted += '&times;10<sup>' + parts[1] + '</sup>';
+			formatted += '10<sup>' + parts[1] + '</sup>';
 		}
 
 		if (formatted !== '') {
