@@ -63,9 +63,8 @@ define([
 		return [
 			'<li id="', this._getItemId(item), '" class="rtgm-list-item">',
 				'<span class="rtgm-title">', item.get('title'), '</span>',
-				'<a href="', item.get('url'), '" class="rtgm-list-download">',
-					'Raw Data Results',
-				'</a>',
+				'<a target="_blank" href="', item.get('url'), '" ',
+						'class="rtgm-list-download">Raw Data Results</a>',
 				'<dl class="rtgm-summary">',
 					'<dt><abbr title="Uniform Hazard Ground Motion">UHGM</dt>',
 					'<dd>', this._formatNumber(item.get('uhgm'), 3).toFixed(3), '</dd>',
