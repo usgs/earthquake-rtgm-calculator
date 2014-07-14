@@ -40,8 +40,11 @@ define([
 		}
 	};
 
+	var TARGETRISK = -1.0 * Math.log(1.0 - 0.01) / 50.0;
+	var AFE4UHGM = -1.0 * Math.log(1.0 - 0.02) / 50.0;
+
 	var COLORS = [
-		['#00F00'],
+		['#00FF00'],
 		['#00FF00', '#FF0000'],
 		['#00FF00', '#0000FF', '#FF0000'],
 		['#00FF00', '#00FFFF', '#0000FF', '#FF0000'],
@@ -66,7 +69,7 @@ define([
 		    colors = COLORS[iterations.length - 1],
 		    labels = ['SA'], pdf = [], cdf = [], integrand = [], risk = [],
 		    i = null, numIters = iterations.length, iter = null;
-		
+
 		for (i = 0; i < numIters; i++) {
 			labels.push('Iteration ' + (i+1));
 			iter = iterations[i];
@@ -78,12 +81,34 @@ define([
 
 		labels[labels.length - 1] = 'Final Iteration';
 
-		this._renderHazardGraph(originalMin, originalMax, sa, afe);
+		this._renderHazardGraph(originalMin, originalMax, sa, afe, {
+			underlayCallback: function(canvas, area, g) {
+				// Need to take the ln of AFE4UHGM because all points on this graph are similarly transformed.
+				var coords = g.toDomCoords(0, Math.log(AFE4UHGM));
+
+				canvas.strokeStyle = 'black';
+				canvas.lineWidth = 2;
+				canvas.beginPath();
+				canvas.moveTo(area.x, coords[1]);
+				canvas.lineTo(area.x + area.w, coords[1]);
+				canvas.stroke();
+			}
+		});
 		this._renderGraph(this._cdfGraphOutput, sa, cdf, {
 			title: 'Fragility Curves',
 			ylabel: 'Conditional Collapse Probability',
 			colors: colors,
-			labels: labels
+			labels: labels,
+			underlayCallback: function(canvas, area, g) {
+				var coords = g.toDomCoords(0, TARGETRISK);
+
+				canvas.strokeStyle = 'black';
+				canvas.lineWidth = 2;
+				canvas.beginPath();
+				canvas.moveTo(area.x, coords[1]);
+				canvas.lineTo(area.x + area.w, coords[1]);
+				canvas.stroke();
+			}
 		});
 		this._renderGraph(this._pdfGraphOutput, sa, pdf, {
 			title: 'Derivative of Fragility Curves',
@@ -105,6 +130,16 @@ define([
 			labels: labels,
 			ymutatefn: function (val) {
 				return 1 - Math.exp(-1.0 * val * 50);
+			},
+			underlayCallback: function(canvas, area, g) {
+				var coords = g.toDomCoords(0, 0.01);
+
+				canvas.strokeStyle = 'black';
+				canvas.lineWidth = 2;
+				canvas.beginPath();
+				canvas.moveTo(area.x, coords[1]);
+				canvas.lineTo(area.x + area.w, coords[1]);
+				canvas.stroke();
 			}
 		});
 	};
@@ -139,7 +174,7 @@ define([
 	};
 
 	RTGMGraphOutput.prototype._renderHazardGraph = function (oMin, oMax, xvals,
-				yvals) {
+				yvals, options) {
 		var dataStr = [], oMinIdx = 0, oMaxIdx = xvals.length,
 		    i = null, numVals = xvals.length, formatFn = null;
 
@@ -165,7 +200,7 @@ define([
 
 		this._hazardGraphOutput.innerHTML = '';
 		new Dygraph(this._hazardGraphOutput, dataStr.join('\n'), Util.extend({},
-			GRAPH_DEFAULTS, {
+			GRAPH_DEFAULTS, options || {}, {
 			title: 'Hazard Curve',
 			labels: ['SA', 'AFE'],
 			ylabel: 'Annual Frequence of Exceedance',
