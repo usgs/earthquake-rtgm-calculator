@@ -83,13 +83,29 @@ define([
 			title: 'Fragility Curves',
 			ylabel: 'Conditional Collapse Probability',
 			colors: colors,
-			labels: labels
+			labels: labels,
+			axes: {
+				x: GRAPH_DEFAULTS.axes.x,
+				y: {
+					axisLabelFormatter: function (val) {
+						return val.toFixed(2);
+					}
+				}
+			}
 		});
 		this._renderGraph(this._pdfGraphOutput, sa, pdf, {
 			title: 'Derivative of Fragility Curves',
 			ylabel: 'Conditional Collapse Probability Density',
 			colors: colors,
-			labels: labels
+			labels: labels,
+			axes: {
+				x: GRAPH_DEFAULTS.axes.x,
+				y: {
+					axisLabelFormatter: function (val) {
+						return val.toFixed(2);
+					}
+				}
+			}
 		});
 		this._renderGraph(this._integrandGraphOutput, sa, integrand, {
 			title: 'Hazard Curve &times; Derivative of Fragility Curves',
