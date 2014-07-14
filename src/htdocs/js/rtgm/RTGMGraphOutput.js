@@ -40,7 +40,7 @@ define([
 		}
 	};
 
-	var TARGETRISK = -1.0 * Math.log(1.0 - 0.01) / 50.0;
+	var TARGETRISK = 0.1;
 	var AFE4UHGM = -1.0 * Math.log(1.0 - 0.02) / 50.0;
 
 	var COLORS = [
@@ -85,6 +85,7 @@ define([
 			underlayCallback: function(canvas, area, g) {
 				// Need to take the ln of AFE4UHGM because all points on this graph are similarly transformed.
 				var coords = g.toDomCoords(0, Math.log(AFE4UHGM));
+				var textmargin = 3;
 
 				canvas.strokeStyle = 'black';
 				canvas.lineWidth = 2;
@@ -92,6 +93,11 @@ define([
 				canvas.moveTo(area.x, coords[1]);
 				canvas.lineTo(area.x + area.w, coords[1]);
 				canvas.stroke();
+
+
+				canvas.textAlign = 'right';
+				canvas.fillText('AFE4UHGM',
+						area.x + area.w, coords[1] - textmargin);
 			}
 		});
 		this._renderGraph(this._cdfGraphOutput, sa, cdf, {
@@ -101,6 +107,7 @@ define([
 			labels: labels,
 			underlayCallback: function(canvas, area, g) {
 				var coords = g.toDomCoords(0, TARGETRISK);
+				var textmargin = 3;
 
 				canvas.strokeStyle = 'black';
 				canvas.lineWidth = 2;
@@ -108,6 +115,11 @@ define([
 				canvas.moveTo(area.x, coords[1]);
 				canvas.lineTo(area.x + area.w, coords[1]);
 				canvas.stroke();
+
+
+				canvas.textAlign = 'right';
+				canvas.fillText('Target Risk',
+						area.x + area.w, coords[1] - textmargin);
 			}
 		});
 		this._renderGraph(this._pdfGraphOutput, sa, pdf, {
@@ -133,6 +145,7 @@ define([
 			},
 			underlayCallback: function(canvas, area, g) {
 				var coords = g.toDomCoords(0, 0.01);
+				var textmargin = 3;
 
 				canvas.strokeStyle = 'black';
 				canvas.lineWidth = 2;
@@ -140,6 +153,10 @@ define([
 				canvas.moveTo(area.x, coords[1]);
 				canvas.lineTo(area.x + area.w, coords[1]);
 				canvas.stroke();
+
+				canvas.textAlign = 'right';
+				canvas.fillText('1% Probability of Collapse',
+						area.x + area.w, coords[1] - textmargin);
 			}
 		});
 	};
