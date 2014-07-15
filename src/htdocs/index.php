@@ -1,22 +1,13 @@
 <?php
-// Hack to detect server installation
-if (function_exists('param')) {
-	// Server install...
+if (!isset($TEMPLATE)) {
 	$TITLE = 'Risk Targeted Ground Motion Calculator';
-	$STYLESHEETS = 'css/index.css';
-	include_once $_SERVER['DOCUMENT_ROOT'] . '/template/template.inc.php';
-} else {
-	// Local install...
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<title>Risk Targeted Ground Motion Calculator</title>
-	<link rel="stylesheet" href="css/index.css"/>
-</head>
-<body>
-	<h1>Risk Targeted Ground Motion Calculator</h1>
-<?php
+	$HEAD = '
+		<link rel="stylesheet" href="css/index.css"/>
+	';
+	$FOOT = '
+		<script src="js/index.js"></script>
+	';
+	include_once 'template.inc.php';
 }
 ?>
 
@@ -27,9 +18,3 @@ if (function_exists('param')) {
 </p>
 
 <div id="application"></div>
-<script src="requirejs/require.js" data-main="js/index.js"></script>
-
-<?php if (function_exists('param')) : ?>
-</body>
-</html>
-<?php endif; ?>

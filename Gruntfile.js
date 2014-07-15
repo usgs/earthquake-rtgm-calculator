@@ -9,6 +9,13 @@ var mountFolder = function (connect, dir) {
 };
 
 var mountPHP = function (dir, options) {
+	options = options || {
+		'.php': 'php-cgi',
+		'env': {
+			'PHPRC': process.cwd() + '/node_modules/hazdev-template/src/conf/php.ini'
+		}
+	};
+
 	return gateway(require('path').resolve(dir), options);
 };
 
@@ -81,9 +88,16 @@ module.exports = function (grunt) {
 			options: {
 				hostname: 'localhost'
 			},
-			rules: {
-				'^/service/([^/]+)/([^/]+)/?([^/]*)$': '/service.php?x=$1&y=$2&c=$3'
-			},
+			rules: [
+				{
+					from: '^/service/([^/]+)/([^/]+)/?([^/]*)$',
+					to: '/service.php?x=$1&y=$2&c=$3'
+				},
+				{
+					from: '^/theme/(.*)$',
+					to: '/hazdev-template/src/htdocs/$1'
+				}
+			],
 			dev: {
 				options: {
 					base: '<%= app.src %>/htdocs',
@@ -95,7 +109,8 @@ module.exports = function (grunt) {
 							rewriteRulesSnippet,
 							mountFolder(connect, '.tmp'),
 							mountPHP(options.base),
-							mountFolder(connect, options.base)
+							mountFolder(connect, options.base),
+							mountFolder(connect, 'node_modules'),
 						];
 					}
 				}
