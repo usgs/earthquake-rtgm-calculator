@@ -224,6 +224,24 @@ module.exports = function (grunt) {
 				src: [
 					'**/*'
 				]
+			},
+			dygraph_axes: {
+				expand: true,
+				cwd: 'node_modules/dygraphs/plugins',
+				src: ['axes.js'],
+				dest: 'node_modules/dygraphs/plugins',
+				rename: function (dest, src) {
+					return dest + '/' + src.replace('.js', '-orig.js');
+				}
+			},
+			dygraph_axes_orig: {
+				expand: true,
+				cwd: 'node_modules/dygraphs/plugins',
+				src: ['axes-orig.js'],
+				dest: 'node_modules/dygraphs/plugins',
+				rename: function (dest, src) {
+					return dest + '/' + src.replace('-orig.js', '.js');
+				}
 			}
 		},
 		replace: {
@@ -243,6 +261,38 @@ module.exports = function (grunt) {
 						to: 'lib/html5shiv/html5shiv.js'
 					}
 				]
+			},
+			dygraph_axes: {
+				src: ['node_modules/dygraphs/plugins/axes-orig.js'],
+				dest: 'node_modules/dygraphs/plugins/axes.js',
+				replacements: [
+					{
+						from: '        /* Tick marks are currently clipped, so don\'t bother drawing them.',
+						to: ''
+					},
+					{
+						from: '        */',
+						to: ''
+					},
+					{
+						from: 'context.lineTo(halfUp(x - sgn * this.attr_(\'axisTickSize\')), halfDown(y));',
+						to: 'context.lineTo(halfUp(x + sgn * g.getOption(\'axisTickSize\')), halfDown(y));'
+					},
+					{
+						from: 'context.lineTo(halfUp(x), halfDown(y + this.attr_(\'axisTickSize\')));',
+						to: 'context.lineTo(halfUp(x), halfDown(y - g.getOption(\'axisTickSize\')));'
+					}
+				]
+			}
+		},
+		shell: {
+			dygraphs: {
+				command: 'pwd && ./generate-combined.sh',
+				options: {
+					execOptions: {
+						cwd: 'node_modules/dygraphs'
+					}
+				}
 			}
 		},
 		open: {
@@ -258,7 +308,8 @@ module.exports = function (grunt) {
 		},
 		clean: {
 			dist: ['<%= app.dist %>'],
-			dev: ['<%= app.tmp %>', '.sass-cache']
+			dev: ['<%= app.tmp %>', '.sass-cache'],
+			dygraph_axes_orig: ['node_modules/dygraphs/plugins/axes-orig.js']
 		}
 	});
 
@@ -363,6 +414,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('default', [
 		'clean:dist',
+		'enable-tickmarks',
 		'compass:dev',
 		'configureRewriteRules',
 		'connect:test',
@@ -370,6 +422,14 @@ module.exports = function (grunt) {
 		'open:test',
 		'open:dev',
 		'watch'
+	]);
+
+	grunt.registerTask('enable-tickmarks', [
+		'copy:dygraph_axes', // Make a backup copy in a axes-orig.js
+		'replace:dygraph_axes', // Replace out of axes-orig.js file into axes.src
+		'shell:dygraphs', // Build dygraphs
+		'copy:dygraph_axes_orig', // Put original back in place
+		'clean:dygraph_axes_orig' // Get rid of copy
 	]);
 
 };

@@ -39,7 +39,8 @@
     "grunt-connect-rewrite": "~0.1.1",
     "sinon": "~1.7.3",
     "hazdev-webutils": "0.0.13",
-    "dygraphs": "~1.0.1-npm"
+    "dygraphs": "~1.0.1-npm",
+    "grunt-shell": "~0.7.0"
   },
   "engines": {
     "node": ">=0.8.0"
