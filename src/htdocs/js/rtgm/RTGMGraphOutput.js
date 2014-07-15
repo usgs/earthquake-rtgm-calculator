@@ -40,6 +40,9 @@ define([
 	};
 
 	var drawLine = function (from, to, context, color, width) {
+		var originalStrokeStyle = context.strokeStyle,
+		    originalLineWidth = context.lineWidth;
+
 		if (typeof color === 'undefined') {
 			color = 'black';
 		}
@@ -56,6 +59,9 @@ define([
 		context.closePath();
 
 		context.stroke();
+
+		context.strokeStyle = originalStrokeStyle;
+		context.lineWidth = originalLineWidth;
 	};
 
 	// TODO :: Improve this to use a b-tree style search rather than linear
@@ -171,8 +177,8 @@ define([
 				}
 
 				drawLine([left, y], [right, y], context, '#666', 0.5);
-				context.lineWidth = 1;
-				context.strokeText('Target Risk', left, y - 5, 100);
+				context.textAlign = 'right';
+				context.fillText('Target Risk', right, y - 5);
 
 				for (var i = 0; i < cdf.length; i++) {
 					var x = getIntersection(sa, cdf[i], 0.1);
@@ -184,8 +190,6 @@ define([
 					x = dygraph.toDomXCoord(Math.log(x));
 					drawLine([x, top], [x, bottom], context, colors[i], 0.25);
 				}
-
-				context.strokeStyle = 'black';
 			}
 		});
 
@@ -246,8 +250,8 @@ define([
 				    right = dygraph.toDomXCoord(Math.log(sa[sa.length - 1]));
 
 				drawLine([left, y], [right, y], context, '#666', 0.5);
-				context.lineWidth = 1;
-				context.strokeText('1% Probability of Collapse', left, y - 5, 150);
+				context.textAlign = 'right';
+				context.fillText('1% Probability of Collapse', right, y - 5);
 			}
 		});
 	};
@@ -330,16 +334,14 @@ define([
 
 				// AFE4UHGM
 				drawLine([xmin, y], [xmax, y], context, '#666', 0.5);
-				context.lineWidth = 1;
-				context.strokeText('AFE4UHGM', xmin, y + 12, 100);
+				context.textAlign = 'right';
+				context.fillText('AFE4UHGM', xmax, y - 5);
 
 				for (; i < annotations.length; i++) {
 					xAnnotation = dygraph.toDomXCoord(Math.log(annotations[i]));
 					drawLine([xAnnotation, top], [xAnnotation, bottom], context,
 							colors[i], 0.25);
 				}
-
-				context.strokeStyle = 'black';
 			},
 			colors: ['#000000']
 		}));
