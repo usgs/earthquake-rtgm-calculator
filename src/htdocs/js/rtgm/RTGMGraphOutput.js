@@ -55,18 +55,18 @@ define([
 		axes: {
 			x: {
 				axisLabelFormatter: function (val) {
-					return Math.round(Math.exp(val)*1000)/1000;
+					return Math.exp(val).toFixed(3);
 				},
 				valueFormatter: function (val) {
 					return 'Spectral Response Acceleration: ' +
-							Math.round(Math.exp(val)*1000)/1000;
+							Math.exp(val).toFixed(3);
 				}
 			}
 		}
 	};
 
 	var COLORS = [
-		['#00F00'],
+		['#00FF00'],
 		['#00FF00', '#FF0000'],
 		['#00FF00', '#0000FF', '#FF0000'],
 		['#00FF00', '#00FFFF', '#0000FF', '#FF0000'],
