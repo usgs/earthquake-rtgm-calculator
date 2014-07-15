@@ -39,6 +39,46 @@ define([
 		}
 	};
 
+	var drawLine = function (from, to, context, color, width) {
+		if (typeof color === 'undefined') {
+			color = 'black';
+		}
+		if (typeof width === 'undefined') {
+			width = 1;
+		}
+
+		context.strokeStyle = color;
+		context.lineWidth = width;
+
+		context.beginPath();
+		context.moveTo(from[0], from[1]);
+		context.lineTo(to[0], to[1]);
+		context.closePath();
+
+		context.stroke();
+	};
+
+	// TODO :: Improve this to use a b-tree style search rather than linear
+	var getIntersection = function (xvals, yvals, y) {
+		var i = 0, len = yvals.length, xmin, xmax, ymin, ymax;
+
+		try {
+			for (; i < len; i++) {
+				if (yvals[i] > y) {
+					xmin = xvals[i - 1];
+					xmax = xvals[i];
+					ymin = yvals[i - 1];
+					ymax = yvals[i];
+					break;
+				}
+			}
+
+			return xmin + ((xmax - xmin) * ((y - ymin) / (ymax - ymin)));
+		} catch (e) {
+			return Math.NaN;
+		}
+	};
+
 	var GRAPH_DEFAULTS = {
 		xlabel: 'Spectral Response Acceleration (g)',
 		drawGrid: false,
@@ -90,7 +130,8 @@ define([
 		    originalMax = item.get('originalHCMax'),
 		    colors = COLORS[iterations.length - 1],
 		    labels = ['SA'], pdf = [], cdf = [], integrand = [], risk = [],
-		    i = null, numIters = iterations.length, iter = null;
+		    i = null, numIters = iterations.length, iter = null,
+		    hazardAnnotations = null;
 		
 		for (i = 0; i < numIters; i++) {
 			labels.push('Iteration ' + (i+1));
@@ -103,7 +144,6 @@ define([
 
 		labels[labels.length - 1] = 'Final Iteration';
 
-		this._renderHazardGraph(originalMin, originalMax, sa, afe);
 		this._renderGraph(this._cdfGraphOutput, sa, cdf, {
 			title: 'Fragility Curves',
 			ylabel: 'Conditional Collapse Probability',
@@ -116,8 +156,43 @@ define([
 						return val.toFixed(2);
 					}
 				}
+			},
+			underlayCallback: function (context, area, dygraph) {
+				var y = dygraph.toDomYCoord(0.1),
+				    left = dygraph.toDomXCoord(Math.log(sa[0])),
+				    right = dygraph.toDomXCoord(Math.log(sa[sa.length - 1])),
+				    top = dygraph.toDomYCoord(1.0),
+				    bottom = dygraph.toDomYCoord(0.0),
+				    populateAnnotations = false;
+
+				if (hazardAnnotations === null) {
+					populateAnnotations = true;
+					hazardAnnotations = [];
+				}
+
+				drawLine([left, y], [right, y], context, '#666', 0.5);
+				context.lineWidth = 1;
+				context.strokeText('Target Risk', left, y - 5, 100);
+
+				for (var i = 0; i < cdf.length; i++) {
+					var x = getIntersection(sa, cdf[i], 0.1);
+
+					if (populateAnnotations) {
+						hazardAnnotations.push(x);
+					}
+
+					x = dygraph.toDomXCoord(Math.log(x));
+					drawLine([x, top], [x, bottom], context, colors[i], 0.25);
+				}
+
+				context.strokeStyle = 'black';
 			}
 		});
+
+		// Must do this after the CDF graph, so we know where annotations go
+		this._renderHazardGraph(originalMin, originalMax, sa, afe,
+				hazardAnnotations);
+
 		this._renderGraph(this._pdfGraphOutput, sa, pdf, {
 			title: 'Derivative of Fragility Curves',
 			ylabel: 'Conditional Collapse Probability Density',
@@ -164,6 +239,15 @@ define([
 			},
 			ymutatefn: function (val) {
 				return 1 - Math.exp(-1.0 * val * 50);
+			},
+			underlayCallback: function (context, area, dygraph) {
+				var y = dygraph.toDomYCoord(0.01),
+				    left = dygraph.toDomXCoord(Math.log(sa[0])),
+				    right = dygraph.toDomXCoord(Math.log(sa[sa.length - 1]));
+
+				drawLine([left, y], [right, y], context, '#666', 0.5);
+				context.lineWidth = 1;
+				context.strokeText('1% Probability of Collapse', left, y - 5, 150);
 			}
 		});
 	};
@@ -198,7 +282,7 @@ define([
 	};
 
 	RTGMGraphOutput.prototype._renderHazardGraph = function (oMin, oMax, xvals,
-				yvals) {
+				yvals, annotations) {
 		var dataStr = [], oMinIdx = 0, oMaxIdx = xvals.length,
 		    i = null, numVals = xvals.length;
 
@@ -236,6 +320,27 @@ define([
 					}
 				}
 			}),
+			underlayCallback: function (context, area, dygraph) {
+				var y = dygraph.toDomYCoord(Math.log(0.0004)),
+				    xmin = dygraph.toDomXCoord(Math.log(xvals[0])),
+				    xmax = dygraph.toDomXCoord(Math.log(xvals[xvals.length - 1])),
+				    top = dygraph.toDomYCoord(Math.log(yvals[numVals - 1])),
+				    bottom = dygraph.toDomYCoord(Math.log(yvals[0])),
+				    i = 0, xAnnotation, colors = COLORS[annotations.length - 1];
+
+				// AFE4UHGM
+				drawLine([xmin, y], [xmax, y], context, '#666', 0.5);
+				context.lineWidth = 1;
+				context.strokeText('AFE4UHGM', xmin, y + 12, 100);
+
+				for (; i < annotations.length; i++) {
+					xAnnotation = dygraph.toDomXCoord(Math.log(annotations[i]));
+					drawLine([xAnnotation, top], [xAnnotation, bottom], context,
+							colors[i], 0.25);
+				}
+
+				context.strokeStyle = 'black';
+			},
 			colors: ['#000000']
 		}));
 	};
