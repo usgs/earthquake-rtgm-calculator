@@ -41,11 +41,12 @@ define([
 
 	var GRAPH_DEFAULTS = {
 		xlabel: 'Spectral Response Acceleration (g)',
-		drawGrid: true,
+		drawGrid: false,
 		drawPoints: true,
 		sigFigs: 3,
 		digitsAfterDecimal: 3,
 		xAxisLabelWidth: 75,
+		axisTickSize: 5,
 		yAxisLabelWidth: 100, /* Sync with CSS dyraph-label#text-indent */
 		xRangePad: 25.0,
 		yRangePad: 25.0,
