@@ -17,7 +17,14 @@
 		top:auto !important;
 		left:130px !important;
 		bottom:115px !important;
+		width:300px !important;
 		background-color:transparent !important;
+	}
+}
+
+@media screen and (max-width:480px) {
+	.dygraph-legend {
+		display:none !important;
 	}
 }
 
