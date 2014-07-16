@@ -91,7 +91,7 @@ define([
 			curve = new Curve({xs: sa, ys: afe});
 		} catch (ex) {
 			this.trigger('hazardCurveError', {title: title, sa: sa, afe: afe,
-					ex: ex});
+					message: ex});
 		}
 
 		if (curve !== null) {

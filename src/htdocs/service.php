@@ -26,7 +26,8 @@
 	if (!isset($_GET['x']) || !isset($_GET['y'])) {
 		// Error, must have x and y values
 		jsonResponse(array(
-			'error' => 'X and Y values must be specified.',
+			'error' => 'Spectral Acceleration and Annual Frequency of Exceedance ' +
+			           'values must both be specified.',
 			'status' => 400
 			), $callback);
 		exit();
@@ -47,7 +48,8 @@
 	// Basic input validation
 	if (sizeof($xs) != sizeof($ys)) {
 		jsonResponse(array(
-			'error' => 'X and Y must be the same size.',
+			'error' => 'Spectral Acceleration and Annual Frequency of Exceedance ' +
+			           'values must be the same size.',
 			'status' => 400
 			), $callback);
 		exit();

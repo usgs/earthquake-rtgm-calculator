@@ -37,7 +37,11 @@ define([
 		    onError, cleanup = null;
 		
 		onError = function () {
-			_this.trigger('error', {status: null, error: 'Request Failed'});
+			_this.trigger('error', {
+				status: null,
+				message: 'The server failed to process your request. ' +
+				       'Please try again later.'
+			});
 			cleanup();
 		};
 
