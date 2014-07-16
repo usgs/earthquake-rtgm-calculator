@@ -178,7 +178,7 @@ define([
 
 				drawLine([left, y], [right, y], context, '#666', 0.5);
 				context.textAlign = 'right';
-				context.fillText('Target Risk', right, y - 5);
+				context.fillText('10% Probability of Collapse', right, y - 5);
 
 				for (var i = 0; i < cdf.length; i++) {
 					var x = getIntersection(sa, cdf[i], 0.1);
@@ -251,7 +251,8 @@ define([
 
 				drawLine([left, y], [right, y], context, '#666', 0.5);
 				context.textAlign = 'right';
-				context.fillText('1% Probability of Collapse', right, y - 5);
+				context.fillText('1% Probability of Collapse in 50 Years',
+						right, y - 5);
 			}
 		});
 	};
@@ -335,7 +336,8 @@ define([
 				// AFE4UHGM
 				drawLine([xmin, y], [xmax, y], context, '#666', 0.5);
 				context.textAlign = 'right';
-				context.fillText('AFE4UHGM', xmax, y - 5);
+				context.fillText('2% Probability of Exceedance in 50 Years',
+						xmax, y - 5);
 
 				for (; i < annotations.length; i++) {
 					xAnnotation = dygraph.toDomXCoord(Math.log(annotations[i]));
