@@ -9,3 +9,8 @@
 .definitions > dt {
 	margin-top:8px;
 }
+.examplelink {
+	display:block;
+	max-width:100%;
+	overflow-x:auto;
+}

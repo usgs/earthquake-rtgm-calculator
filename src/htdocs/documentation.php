@@ -1,41 +1,37 @@
 <?php
-include_once '../conf/config.inc.php';
-$usingTemplate = function_exists('param');
-
-$sa = implode(',', array(
-	0.01,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.2,1.4,1.7,2
-));
-$afe1 = implode(',', array(
-	0.5696,0.088335,0.02925,0.01229725,0.00564925,0.00275075,0.001385175,
-	0.000733875,0.0003984225,0.0002205625,0.0001235975,0.00006881825,
-	0.0000382493775,0.0000113329875,0.00000134645,0.000000064884
-));
-$afe2 = implode(',', array(
-	0.5739,0.09486,0.032775,0.0143475,0.00689675,0.00349925,0.001878025,
-	0.0010358,0.00059415,0.00034517,0.0002041625,0.00012253,0.00007213325,
-	0.000025567215,0.00000481976025,0.0000007196
-));
-
-$jsonRequest = 'http://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service/' .
-		$sa . '/' . $afe1;
-$jsonpRequest = 'http://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service/' .
-		$sa . '/' . $afe2 . '/processData';
-
-if ($usingTemplate) {
+if (!isset($TEMPLATE)) {
 	$TITLE = 'Risk Targeted Ground Motion - API Documentation';
-	$STYLESHEETS = 'css/documentation.css';
-	include_once $_SERVER['DOCUMENT_ROOT'] . '/template/template.inc.php';
-} else {
+	$HEAD = '
+		<link rel="stylesheet" href="css/documentation.css"/>
+	';
+
+	include_once '../conf/config.inc.php';
+
+	$sa = implode(',', array(
+		0.01,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.2,1.4,1.7,2
+	));
+
+	$afe1 = implode(',', array(
+		0.5696,0.088335,0.02925,0.01229725,0.00564925,0.00275075,0.001385175,
+		0.000733875,0.0003984225,0.0002205625,0.0001235975,0.00006881825,
+		0.0000382493775,0.0000113329875,0.00000134645,0.000000064884
+	));
+
+	$afe2 = implode(',', array(
+		0.5739,0.09486,0.032775,0.0143475,0.00689675,0.00349925,0.001878025,
+		0.0010358,0.00059415,0.00034517,0.0002041625,0.00012253,0.00007213325,
+		0.000025567215,0.00000481976025,0.0000007196
+	));
+
+	$jsonRequest = 'http://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service/' .
+			$sa . '/' . $afe1;
+
+	$jsonpRequest = 'http://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service/' .
+			$sa . '/' . $afe2 . '/processData';
+
+	include_once 'template.inc.php';
+}
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<title>Risk Targeted Ground Motion - API Documentation</title>
-	<link rel="stylesheet" href="css/documentation.css"/>
-</head>
-<body class="content">
-	<h1>Risk Targeted Ground Motion - API Documentation</h1>
-<?php } ?>
 
 <p>
 	This page describes the process for <a href="#input">creating a request</a>
@@ -216,19 +212,14 @@ if ($usingTemplate) {
 	<li>
 		Example 1: JSON request, no callback is specified. Note the content-type
 		header in the response.<br/>
-		<a href="<?php print $jsonRequest; ?>" target="_blank"
+		<a href="<?php print $jsonRequest; ?>" target="_blank" class="examplelink"
 				><?php print $jsonRequest; ?></a>
 	</li>
 	<li>
 		Example 2: JSONP request, a callback is specified. Note the content-type
 		header in the response. The response for this request is wrapped in the
 		specified javascript callback.<br/>
-		<a href="<?php print $jsonpRequest; ?>" target="_blank"
+		<a href="<?php print $jsonpRequest; ?>" target="_blank" class="examplelink"
 				><?php print $jsonpRequest; ?></a>
 	</li>
 </ul>
-
-<?php if ($usingTemplate) : ?>
-</body>
-</html>
-<?php endif; ?>
