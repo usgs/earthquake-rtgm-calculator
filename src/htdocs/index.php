@@ -1,12 +1,20 @@
 <?php
 if (!isset($TEMPLATE)) {
+	include_once '../conf/config.inc.php';
+
 	$TITLE = 'Risk Targeted Ground Motion Calculator';
 	$HEAD = '
+		<!-- Template provides box-sizing -->
 		<link rel="stylesheet" href="css/index.css"/>
 	';
 	$FOOT = '
+		<!-- RequireJS provided by template -->
+		<script>
+			define(\'APP_CONFIG\', {MOUNT_PATH: \'' . $MOUNT_PATH . '\'});
+		</script>
 		<script src="js/index.js"></script>
 	';
+
 	include_once 'template.inc.php';
 }
 ?>

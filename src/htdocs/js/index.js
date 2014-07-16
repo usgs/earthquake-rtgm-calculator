@@ -14,15 +14,18 @@ require.config({
 
 require([
 	'rtgm/RTGMApplication',
+	'APP_CONFIG',
 	'FoxPlazaPreload'
 ], function (
 	RTGMApplication,
+	APP_CONFIG,
 	FoxPlazaPreload
 ) {
 	'use strict';
 
 	new RTGMApplication({
-		el: document.querySelector('#application')
+		el: document.querySelector('#application'),
+		baseUrl: APP_CONFIG.MOUNT_PATH
 	});
 
 	FoxPlazaPreload.load();

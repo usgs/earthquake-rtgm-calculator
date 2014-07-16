@@ -27,6 +27,7 @@ define([
 	var RTGMApplication = function (options) {
 		options = Util.extend({}, DEFAULTS, options || {});
 		this._el = options.el || document.createElement('div');
+		this._baseUrl = options.baseUrl || '';
 
 		this._initialize();
 	};
@@ -35,7 +36,7 @@ define([
 		Util.addClass(this._el, 'rtgm-application');
 
 		this._collection = new Collection();
-		this._calculator = new RTGMCalculator();
+		this._calculator = new RTGMCalculator(this._baseUrl + '/service');
 		this._calculator.on('success', this._rtgmSuccess, this);
 		this._calculator.on('error', this._handleError, this);
 
