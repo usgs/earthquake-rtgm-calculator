@@ -1,12 +1,9 @@
 @import 'compass/css3';
 @import '/hazdev-webutils/src/mvc/ModalView.css';
-@import 'RTGMInputView.css';
-@import 'RTGMListOutput.css';
-@import 'RTGMGraphOutput.css';
 
-* {
-	@include box-sizing(border-box);
-}
+@import 'RTGMInputView';
+@import 'RTGMListOutput';
+@import 'RTGMGraphOutput';
 
 @media print {
 	.intro {display: none;}
