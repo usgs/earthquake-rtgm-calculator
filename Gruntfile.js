@@ -5,14 +5,10 @@ var lrSnippet = require('connect-livereload')({port: LIVE_RELOAD_PORT});
 var gateway = require('gateway');
 
 var mountFolder = function (connect, dir) {
-	console.log('static');
-	console.log(dir);
 	return connect.static(require('path').resolve(dir));
 };
 
 var mountPHP = function (dir, options) {
-	console.log('php');
-	console.log(dir);
 	options = options || {
 		'.php': 'php-cgi',
 		'env': {
