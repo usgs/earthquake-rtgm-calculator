@@ -1,4 +1,3 @@
 APP_DIR = /absolute/rtgm
-DATA_DIR = /absolute/rtgm
-MOUNT_PATH = /rtgm
+MOUNT_PATH = 
 

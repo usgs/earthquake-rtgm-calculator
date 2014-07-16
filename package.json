@@ -10,7 +10,8 @@
     "usgs"
   ],
   "scripts": {
-    "test": "grunt test --debug"
+    "test": "grunt test --debug",
+    "postinstall": "src/lib/pre-install"
   },
   "dependencies": {
     "requirejs": "2.1.12"
