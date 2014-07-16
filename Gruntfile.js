@@ -5,10 +5,14 @@ var lrSnippet = require('connect-livereload')({port: LIVE_RELOAD_PORT});
 var gateway = require('gateway');
 
 var mountFolder = function (connect, dir) {
+	console.log('static');
+	console.log(dir);
 	return connect.static(require('path').resolve(dir));
 };
 
 var mountPHP = function (dir, options) {
+	console.log('php');
+	console.log(dir);
 	options = options || {
 		'.php': 'php-cgi',
 		'env': {
@@ -71,23 +75,8 @@ module.exports = function (grunt) {
 		concurrent: {
 			scripts: ['jshint:scripts', 'mocha_phantomjs'],
 			tests: ['jshint:tests', 'mocha_phantomjs'],
-			predist: [
-				'jshint:scripts',
-				'jshint:tests',
-				'compass'
-			],
-			dist: [
-				'requirejs:dist',
-				'cssmin:dist',
-				'htmlmin:dist',
-				'uglify',
-				'copy'
-			]
 		},
 		connect: {
-			options: {
-				hostname: 'localhost'
-			},
 			rules: [
 				{
 					from: '^/service/([^/]+)/([^/]+)/?([^/]*)$',
@@ -100,46 +89,65 @@ module.exports = function (grunt) {
 			],
 			dev: {
 				options: {
-					base: '<%= app.src %>/htdocs',
+					base: ['<%= app.src %>/htdocs', '.tmp', 'node_modules'],
 					port: 8080,
 					debug: true,
 					middleware: function (connect, options) {
-						return [
+						var base = options.base, i, len, folder;
+						var handlers = [
 							lrSnippet,
-							rewriteRulesSnippet,
-							mountFolder(connect, '.tmp'),
-							mountPHP(options.base),
-							mountFolder(connect, options.base),
-							mountFolder(connect, 'node_modules'),
+							rewriteRulesSnippet
 						];
+
+						if (!Array.isArray(base)) {
+							base = [base];
+						}
+						len = base.length;
+
+						for (i = 0; i < len; i++) {
+							folder = base[i];
+							handlers.push(mountPHP(folder));
+							handlers.push(mountFolder(connect, folder));
+						}
+
+						return handlers;
 					}
 				}
 			},
 			dist: {
 				options: {
-					base: '<%= app.dist %>/htdocs',
+					base: ['<%= app.dist %>/htdocs', 'node_modules'],
 					port: 8081,
 					keepalive: true,
+					open: true,
 					middleware: function (connect, options) {
-						return [
-							mountPHP(options.base),
-							mountFolder(connect, options.base)
-						];
+						var handlers = [], i = 0, len = options.base.length, folder;
+
+						// Check everywhere before rewrites
+						for (i = 0; i < len; i++) {
+							folder = options.base[i];
+							handlers.push(mountPHP(folder));
+							handlers.push(mountFolder(connect, folder))
+						}
+
+						// Do rewrites
+						handlers.push(rewriteRulesSnippet);
+
+						// Check everything again after rewrites
+						for (i = 0; i < len; i++) {
+							folder = options.base[i];
+							handlers.push(mountPHP(folder));
+							handlers.push(mountFolder(connect, folder))
+						}
+
+						return handlers;
 					}
 				}
 			},
 			test: {
 				options: {
-					base: '<%= app.test %>',
-					port: 8000,
-					middleware: function (connect, options) {
-						return [
-							mountFolder(connect, '.tmp'),
-							mountFolder(connect, 'node_modules'),
-							mountFolder(connect, options.base),
-							mountFolder(connect, appConfig.src + '/htdocs/js')
-						];
-					}
+					base: ['.tmp', 'node_modules', '<%= app.test %>', '<%= app.src %>/htdocs/js'],
+					port: 8000
 				}
 			}
 		},
@@ -173,27 +181,37 @@ module.exports = function (grunt) {
 			dist: {
 				options: {
 					name: 'index',
-					baseUrl: appConfig.src + '/htdocs/js',
-					out: appConfig.dist + '/htdocs/js/index.js',
-					optimize: 'uglify2',
-					mainConfigFile: appConfig.src + '/htdocs/js/index.js',
+					baseUrl: '<%= app.src %>/htdocs/js',
+					out: '<%= app.dist %>/htdocs/js/index.js',
+					optimize: 'none',
 					useStrict: true,
-					wrap: true,
-					uglify2: {
-						report: 'gzip',
-						mangle: true,
-						compress: true,
-						preserveComments: 'some'
+					paths: {
+						'mvc': '../../../node_modules/hazdev-webutils/src/mvc',
+						'util': '../../../node_modules/hazdev-webutils/src/util',
+						'dygraph': '../../../node_modules/dygraphs/dygraph-combined'
+					},
+					shim: {
+						dygraph: {
+							exports: 'Dygraph'
+						}
 					}
 				}
 			}
 		},
 		cssmin: {
 			dist: {
+				options: {
+					root: 'node_modules'
+				},
 				files: {
 					'<%= app.dist %>/htdocs/css/index.css': [
-						'<%= app.src %>/htdocs/css/**/*.css',
-						'.tmp/css/**/*.css'
+						'.tmp/css/index.css'
+					],
+					'<%= app.dist %>/htdocs/css/theme.css': [
+						'<%= app.tmp %>/css/theme.css'
+					],
+					'<%= app.dist %>/htdocs/css/documentation.css': [
+						'<%= app.src %>/htdocs/css/documentation.css'
 					]
 				}
 			}
@@ -212,32 +230,32 @@ module.exports = function (grunt) {
 			}
 		},
 		uglify: {
+			dist: {
+				files: {
+					'<%= app.dist %>/htdocs/js/index.js':
+							['<%= app.dist %>/htdocs/js/index.js']
+				}
+			},
+			downgrade: {
+				files: {
+					'<%= app.dist %>/htdocs/js/require.js':
+							['node_modules/requirejs/require.js']
+				}
+			}
 		},
 		copy: {
-			app: {
+			dist: {
 				expand: true,
-				cwd: '<%= app.src %>/htdocs',
-				dest: '<%= app.dist %>/htdocs',
+				cwd: '<%= app.src %>',
+				dest: '<%= app.dist %>',
 				src: [
-					'img/**/*.{png,gif,jpg,jpeg}',
-					'**/*.php'
-				]
-			},
-			conf: {
-				expand: true,
-				cwd: '<%= app.src %>/conf',
-				dest: '<%= app.dist/conf',
-				src: [
-					'**/*',
+					'conf/**/*',
+					'lib/**/*',
+					'htdocs/_config.inc.php',
+					'htdocs/documentation.php',
+					'htdocs/index.php',
+					'htdocs/service.php',
 					'!**/*.orig'
-				]
-			},
-			lib: {
-				expand: true,
-				cwd: '<%= app.src %>/lib',
-				dest: '<%= app.dist %>/lib',
-				src: [
-					'**/*'
 				]
 			},
 			dygraph_axes: {
@@ -260,20 +278,21 @@ module.exports = function (grunt) {
 			}
 		},
 		replace: {
-			dist: {
-				src: [
-					'<%= app.dist %>/htdocs/index.html',
-					'<%= app.dist %>/**/*.php'
-				],
+			downgrade_php: {
+				src: ['<%= app.dist %>/htdocs/**/*.php'],
 				overwrite: true,
 				replacements: [
 					{
-						from: 'requirejs/require.js',
-						to: 'lib/requirejs/require.js'
+						from: 'include_once \'template.inc.php\';',
+						to: 'include_once $_SERVER[\'DOCUMENT_ROOT\'] . \'/template/template.inc.php\';'
 					},
 					{
-						from: 'html5shiv-dist/html5shiv.js',
-						to: 'lib/html5shiv/html5shiv.js'
+						from: '<!-- RequireJS provided by template -->',
+						to: '<script src="js/require.js"></script>'
+					},
+					{
+						from: '<!-- Template provides box-sizing -->',
+						to: '<style>#content *{-moz-box-sizing:border-box;box-sizing:border-box;}</style>'
 					}
 				]
 			},
@@ -417,14 +436,27 @@ module.exports = function (grunt) {
 		req.end();
 	});
 
-	grunt.registerTask('build', [
-		'clean:dist',
-		'concurrent:predist',
-		'concurrent:dist',
-		'replace',
+	grunt.registerTask('dist', [
+		'clean',
+		'copy:dist',
+		'compass',
+		'cssmin',
+		'requirejs',
+		'uglify:dist',
 		'configureRewriteRules',
 		'connect:dist',
 		'open:dist'
+	]);
+
+	// Downgrades distributables to work on old template/server environment
+	grunt.registerTask('downgrade', [
+		'clean',
+		'copy:dist',
+		'replace:downgrade_php',
+		'compass',
+		'cssmin',
+		'requirejs',
+		'uglify'
 	]);
 
 	grunt.registerTask('default', [
