@@ -178,7 +178,8 @@ define([
 
 				drawLine([left, y], [right, y], context, '#666', 0.5);
 				context.textAlign = 'right';
-				context.fillText('10% Probability of Collapse', right, y - 5);
+				context.fillText('10% Conditional Probability of Collapse',
+						right, y - 5);
 
 				for (var i = 0; i < cdf.length; i++) {
 					var x = getIntersection(sa, cdf[i], 0.1);
@@ -305,7 +306,7 @@ define([
 		new Dygraph(this._hazardGraphOutput, dataStr.join('\n'), Util.extend({},
 			GRAPH_DEFAULTS, {
 			title: 'Hazard Curve',
-			labels: ['SA', 'AFE'],
+			labels: ['SA', 'All Iterations'],
 			ylabel: 'Annual Frequence of Exceedance',
 			digitsAfterDecimal: 4,
 			drawPointCallback: function (g, name, ctx, cx, cy, color, sz, idx) {
