@@ -40,7 +40,8 @@ require([
 		'spec/CurveTest',
 		'spec/HazardCurveParserTest',
 		'spec/RTGMInputViewTest',
-		'spec/RTGMCalculatorTest'
+		'spec/RTGMCalculatorTest',
+		'spec/RTGMListOutput'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
