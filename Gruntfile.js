@@ -123,7 +123,7 @@ module.exports = function (grunt) {
 						for (i = 0; i < len; i++) {
 							folder = options.base[i];
 							handlers.push(mountPHP(folder));
-							handlers.push(mountFolder(connect, folder))
+							handlers.push(mountFolder(connect, folder));
 						}
 
 						// Do rewrites
@@ -133,7 +133,7 @@ module.exports = function (grunt) {
 						for (i = 0; i < len; i++) {
 							folder = options.base[i];
 							handlers.push(mountPHP(folder));
-							handlers.push(mountFolder(connect, folder))
+							handlers.push(mountFolder(connect, folder));
 						}
 
 						return handlers;
