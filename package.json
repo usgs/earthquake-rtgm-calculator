@@ -1,6 +1,6 @@
 {
   "name": "earthquake-rtgm-calculator",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Web application for calculating risk targeted ground motions and risk coefficients from hazard curves.",
   "repository": {
     "type": "git",
