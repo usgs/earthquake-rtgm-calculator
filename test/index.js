@@ -41,7 +41,7 @@ require([
 		'spec/HazardCurveParserTest',
 		'spec/RTGMInputViewTest',
 		'spec/RTGMCalculatorTest',
-		'spec/RTGMListOutput'
+		'spec/RTGMListOutputTest'
 	], function () {
 		if (window.mochaPhantomJS) {
 			window.mochaPhantomJS.run();
