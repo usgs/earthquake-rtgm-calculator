@@ -3,6 +3,7 @@ if (!isset($TEMPLATE)) {
 	include_once '../conf/config.inc.php';
 
 	$TITLE = 'Risk Targeted Ground Motion Calculator';
+	$NAVIGATION = true;
 	$HEAD = '
 		<!-- Template provides box-sizing -->
 		<link rel="stylesheet" href="css/index.css"/>
