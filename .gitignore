@@ -2,6 +2,7 @@
 .tmp
 .sass-cache
 dist
+.build
 node_modules
 *.sublime-workspace
 src/conf/config.ini
