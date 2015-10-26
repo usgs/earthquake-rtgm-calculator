@@ -16,14 +16,14 @@ $xs = explode(',', $saline);
 array_shift($xs); // Remove leading "SA" identifier
 
 foreach ($contents as $line) {
-	$ys = explode(',', rtrim($line));
-	$period = array_shift($ys);
+  $ys = explode(',', rtrim($line));
+  $period = array_shift($ys);
 
-	$rtgm = new RTGM($xs, $ys);
-	$rtgm->calculate();
-	$result = $rtgm->getStructure();
+  $rtgm = new RTGM($xs, $ys);
+  $rtgm->calculate();
+  $result = $rtgm->getStructure();
 
-	printf("%s\n%f\n%f\n%f\n\n", $period, $result['uhgm'],
-			$result['riskCoefficient'], $result['rtgm']);
+  printf("%s\n%f\n%f\n%f\n\n", $period, $result['uhgm'],
+      $result['riskCoefficient'], $result['rtgm']);
 }
 ?>
