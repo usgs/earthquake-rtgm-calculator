@@ -1,35 +1,38 @@
 .rtgm-graph-output {
-	.graph {
-		margin-top:16px;
-		width:95%;
-		height:275px;
-	}
-	.dygraph-xlabel, .dygraph-title {
-		// Must manually sync this with dygraph.options.yAxisLabelWidth
-		text-indent: 100px;
-	}
-	.dygraph-axis-label-x {
-		text-indent:-25%;
-	}
-	// dygraph doesn't support moving legend, sucky to use !important, but what
-	// are the alternatives?
-	.dygraph-legend {
-		top:auto !important;
-		left:130px !important;
-		bottom:115px !important;
-		width:300px !important;
-		background-color:transparent !important;
-	}
+  .graph {
+    height:275px;
+    margin-top:16px;
+    width:95%;
+  }
+
+  .dygraph-xlabel, .dygraph-title {
+    // Must manually sync this with dygraph.options.yAxisLabelWidth
+    text-indent: 100px;
+  }
+
+  .dygraph-axis-label-x {
+    text-indent:-25%;
+  }
+
+  // dygraph doesn't support moving legend, sucky to use !important, but what
+  // are the alternatives?
+  .dygraph-legend {
+    background-color:transparent !important;
+    bottom:115px !important;
+    left:130px !important;
+    top:auto !important;
+    width:300px !important;
+  }
 }
 
 @media screen and (max-width:480px) {
-	.dygraph-legend {
-		display:none !important;
-	}
+  .dygraph-legend {
+    display:none !important;
+  }
 }
 
 @media print {
-	.rtgm-graph-output .page-break {
-		page-break-before: always;
-	}
+  .rtgm-graph-output .page-break {
+    page-break-before: always;
+  }
 }
