@@ -1,16 +1,19 @@
 .datatype {
-	font-style:italic;
-	color:#666;
-	font-size:0.9em;
+  color:#666;
+  font-size:0.9em;
+  font-style:italic;
 }
+
 .examples > li {
-	margin-bottom:8px;
+  margin-bottom:8px;
 }
+
 .definitions > dt {
-	margin-top:8px;
+  margin-top:8px;
 }
+
 .examplelink {
-	display:block;
-	max-width:100%;
-	overflow-x:auto;
+  display:block;
+  max-width:100%;
+  overflow-x:auto;
 }
