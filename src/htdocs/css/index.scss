@@ -5,27 +5,30 @@
 @import 'RTGMGraphOutput';
 
 @media print {
-	.intro {display: none;}
-	.rtgm-input-view {display:none;}
-	.rtgm-list-output li {display:none;}
-	.rtgm-list-output .selected {display:block;}
+  .intro {display: none;}
+  .rtgm-input-view {display:none;}
+  .rtgm-list-output li {display:none;}
+  .rtgm-list-output .selected {display:block;}
+}
+
+.modal-dialog {
+  bottom:auto; /* Do not need large dialogs for this application. */
 }
 
 .rtgm-input-view {
-	float:left;
-	width:50%;
-	padding-right:16px;
-	margin-bottom:16px;
+  float:left;
+  width:50%;
+  padding-right:16px;
+  margin-bottom:16px;
 }
-.rtgm-list-output {
-	float:left;
-	width:50%;
-}
+
 .rtgm-graph-output {
-	clear:left;
-	width:100%;
-	margin-top:16px;
+  clear:left;
+  width:100%;
+  margin-top:16px;
 }
-.modal-dialog {
-	bottom:auto; /* Do not need large dialogs for this application. */
+
+.rtgm-list-output {
+  float:left;
+  width:50%;
 }
