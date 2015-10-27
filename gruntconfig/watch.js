@@ -29,7 +29,10 @@ var watch = {
     ],
     tasks: [
       'jshint:test',
-      'concurrent:test'
+
+      'browserify:test',
+      'browserify:bundle',
+      'copy:test'
     ]
   },
 

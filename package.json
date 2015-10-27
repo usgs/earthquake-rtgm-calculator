@@ -22,7 +22,6 @@
     "gateway": "^1.0.0",
     "grunt": "^0.4.5",
     "grunt-browserify": "^3.3.0",
-    "grunt-concurrent": "^1.0.0",
     "grunt-connect-proxy": "0.1.10",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-compass": "^1.0.1",
