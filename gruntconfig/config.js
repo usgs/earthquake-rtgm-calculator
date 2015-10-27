@@ -4,11 +4,11 @@ var config = {
   src: 'src',
   build: '.build',
   buildPort: 9050,
-  dataPort: 9057,
+  dataPort: 9055,
   dist: 'dist',
-  distPort: 9053,
+  distPort: 9052,
   liveReloadPort: 9059,
-  templatePort: 9058,
+  templatePort: 9054,
   test: 'test',
   testPort: 9051
 };
