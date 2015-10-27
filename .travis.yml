@@ -12,6 +12,6 @@ before_install:
   - npm --version
   - node --version
 install:
-  - npm install
+  - npm install || npm install
 script:
   - npm test
