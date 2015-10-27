@@ -13,6 +13,6 @@ before_install:
   - node --version
 install:
   - ./src/lib/pre-install
-  - npm install || npm install
+  - npm install
 script:
   - npm test
