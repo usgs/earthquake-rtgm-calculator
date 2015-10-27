@@ -11,6 +11,7 @@ before_install:
   - npm install -g grunt-cli
   - npm --version
   - node --version
+  - ./src/lib/pre-install
 install:
   - npm install || npm install
 script:
