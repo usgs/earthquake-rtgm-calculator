@@ -15,4 +15,5 @@ install:
   - ./src/lib/pre-install
   - npm install || npm install
 script:
+  - ls -lR node_modules/hazdev-template
   - npm test
