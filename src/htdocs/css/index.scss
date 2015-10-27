@@ -1,8 +1,8 @@
-@import 'mvc/ModalView';
+@import 'mvc/ModalView.scss';
 
-@import 'RTGMInputView';
-@import 'RTGMListOutput';
-@import 'RTGMGraphOutput';
+@import '_RTGMInputView.scss';
+@import '_RTGMListOutput.scss';
+@import '_RTGMGraphOutput.scss';
 
 @media print {
   .intro {display: none;}
