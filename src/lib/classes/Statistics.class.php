@@ -291,7 +291,7 @@ class Statistics {
       $n = intval(floor($x - 1.5));
       $prod = 1.0;
       for ($i = 1; $i <= $n; $i++) {
-        $prod = $prod * (x - $i);
+        $prod = $prod * ($x - $i);
       }
       return Statistics::logGamma1p($x - ($n + 1)) + log($prod);
     } else {
