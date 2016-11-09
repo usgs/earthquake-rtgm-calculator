@@ -11,7 +11,7 @@
   );
 
   print navGroup(navItem('/hazards/designmaps/rtgm.php',
-      'Risk Targeted Ground Motion Calculator'),
+      'Risk-Targeted Ground Motion Calculator'),
     navItem('/designmaps/rtgm/', 'Use the Tool') .
     navItem('https://github.com/usgs/earthquake-rtgm-calculator/wiki/Risk-Targeted-Ground-Motion-Calculator-Documentation',
         'Documentation & Help')
