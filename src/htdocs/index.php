@@ -2,7 +2,7 @@
 if (!isset($TEMPLATE)) {
   include_once '../conf/config.inc.php';
 
-  $TITLE = 'Risk Targeted Ground Motion Calculator';
+  $TITLE = 'Risk-Targeted Ground Motion Calculator';
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="css/index.css"/>
