@@ -4,7 +4,7 @@
  * Statistics utilities needed by the RTGM calculator that are not available
  * in standard PHP. Rewritten from the applicable code in:
  *
- * http://commons.apache.org/proper/commons-math/javadocs/api-3.2/index.html
+ * https://commons.apache.org/proper/commons-math/javadocs/api-3.2/index.html
  *
  * See api for algorthim details.
  */

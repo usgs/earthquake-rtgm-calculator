@@ -19,7 +19,7 @@
 
   print navGroup(navItem('/hazards/designmaps/wwdesign.php',
       'Worldwide Seismic Design Tool'),
-    navItem('http://geohazards.usgs.gov/designmaps/ww/',
+    navItem('https://geohazards.usgs.gov/designmaps/ww/',
         'Use the Tool') .
     navItem('https://github.com/usgs/earthquake-wwdesign/wiki/Worldwide-Seismic-Design-Tool-Documentation',
         'Documentation &amp; Help')
