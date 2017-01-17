@@ -23,10 +23,10 @@ if (!isset($TEMPLATE)) {
     0.000025567215,0.00000481976025,0.0000007196
   ));
 
-  $jsonRequest = 'http://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service/' .
+  $jsonRequest = 'https://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service/' .
       $sa . '/' . $afe1;
 
-  $jsonpRequest = 'http://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service/' .
+  $jsonpRequest = 'https://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service/' .
       $sa . '/' . $afe2 . '/processData';
 
   include_once 'template.inc.php';
@@ -42,7 +42,7 @@ if (!isset($TEMPLATE)) {
 
 <h2 id="input">Request API</h2>
 <pre><?php
-  print 'http://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service' .
+  print 'https://' . $_SERVER['HTTP_HOST'] . $MOUNT_PATH . '/service' .
       '/<a href="#input-xvals">x0,x1,...xN</a>' .
       '/<a href="#input-yvals">y0,y1,...yN</a>' .
       '[/<a href="#input-callback">callback</a>]';
@@ -111,7 +111,7 @@ if (!isset($TEMPLATE)) {
   <dt id="output-responsecode">status</dt>
   <dd class="datatype">Integer</dd>
   <dd>
-    The <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+    The <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
     target="_blank">HTTP Response Code</a> for the request. A response of 200
     indicates a successful request. Any other response code indicates an error.
   </dd>
