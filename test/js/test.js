@@ -33,18 +33,20 @@
 // ) {
 'use strict';
 
-mocha.setup('bdd');
+window.addEventListener('DOMContentLoaded', function () {
+  mocha.setup('bdd');
 
-// Add each test class here as they are implemented
-require('./spec/RTGMApplicationTest');
-require('./spec/CurveTest');
-require('./spec/HazardCurveParserTest');
-require('./spec/RTGMInputViewTest');
-require('./spec/RTGMCalculatorTest');
-require('./spec/RTGMListOutputTest');
+  // Add each test class here as they are implemented
+  require('./spec/RTGMApplicationTest');
+  require('./spec/CurveTest');
+  require('./spec/HazardCurveParserTest');
+  require('./spec/RTGMInputViewTest');
+  require('./spec/RTGMCalculatorTest');
+  require('./spec/RTGMListOutputTest');
 
-if (window.mochaPhantomJS) {
-  window.mochaPhantomJS.run();
-} else {
-  mocha.run();
-}
+  if (window.mochaPhantomJS) {
+    window.mochaPhantomJS.run();
+  } else {
+    mocha.run();
+  }
+});
