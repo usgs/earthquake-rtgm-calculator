@@ -1,4 +1,4 @@
-/* global mocha */
+/* global mocha, initMochaPhantomJS */
 // require.config({
 // 	baseUrl: '..',
 // 	paths: {
@@ -34,6 +34,10 @@
 'use strict';
 
 window.addEventListener('DOMContentLoaded', function () {
+  if (typeof initMochaPhantomJS === 'function') {
+    initMochaPhantomJS();
+  }
+
   mocha.setup('bdd');
 
   // Add each test class here as they are implemented
