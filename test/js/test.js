@@ -1,4 +1,4 @@
-/* global mocha */
+/* global mocha, initMochaPhantomJS */
 // require.config({
 // 	baseUrl: '..',
 // 	paths: {
@@ -32,6 +32,10 @@
 // 	mocha
 // ) {
 'use strict';
+
+if (typeof initMochaPhantomJS === 'function') {
+  initMochaPhantomJS();
+}
 
 mocha.setup('bdd');
 
