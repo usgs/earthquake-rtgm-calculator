@@ -112,6 +112,7 @@ class RTGM {
       } else if ($i == 1) {
         $rtgmTmp = $this->rtgmIters[0] * $errorRatio;
       } else {
+        array_multisort($this->riskIters, $this->rtgmIters);
         $rtgmTmp = RTGM_Util::findLogLogY($this->riskIters,
             $this->rtgmIters, $this->target_risk);
       }
