@@ -16,7 +16,7 @@ date_default_timezone_set('UTC');
 
 $DEFAULTS = array(
 	'APP_DIR' => $APP_DIR,
-	'MOUNT_PATH' => ''
+	'MOUNT_PATH' => '/designmaps/rtgm'
 );
 
 $HELP_TEXT = array(
@@ -70,8 +70,23 @@ file_put_contents($APACHE_CONFIG_FILE, '
 			$CONFIG['MOUNT_PATH'] . '/service.php?x=$1&y=$2 [L,PT]
 
 	<Location ' . $CONFIG['MOUNT_PATH'] . '>
-		Order Allow,Deny
-		Allow from all
+		# apache 2.2
+		<IfModule !mod_authz_core.c>
+			Order allow,deny
+			Allow from all
+			<LimitExcept GET OPTIONS>
+				Order allow,deny
+				Deny from all
+			</LimitExcept>
+		</IfModule>
+		
+		# apache 2.4
+		<IfModule mod_authz_core.c>
+			Require all granted
+			<LimitExcept GET OPTIONS>
+				Require all denied
+			</LimitExcept>
+		</IfModule>
 	</Location>
 ');
 ?>
