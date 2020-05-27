@@ -13,11 +13,10 @@ RUN yum install -y \
         php \
     && npm install -g grunt-cli
 
-COPY --chown=usgs-user:usgs-user . /earthquake-rtgm-calculator
+COPY . /earthquake-rtgm-calculator
 WORKDIR /earthquake-rtgm-calculator
 
 # Build project
-USER usgs-user
 RUN /bin/bash --login -c "\
     npm install --no-save \
     && noninteractive=true php src/lib/pre-install \
@@ -25,7 +24,6 @@ RUN /bin/bash --login -c "\
     && rm dist/conf/config.ini \
     "
 
-USER root
 ENV APP_DIR=/var/www/apps
 
 # Pre-configure template
@@ -35,6 +33,7 @@ RUN /bin/bash --login -c "\
     php ${APP_DIR}/hazdev-template/lib/pre-install.php --non-interactive \
     "
 
+# Pre-configure app
 RUN /bin/bash --login -c "\
     mkdir -p ${APP_DIR}/earthquake-rtgm-calculator && \
     cp -r dist/* ${APP_DIR}/earthquake-rtgm-calculator/. && \
@@ -59,7 +58,7 @@ HEALTHCHECK \
     --start-period=1m \
     --retries=2 \
   CMD \
-    test $(curl -s -o /dev/null -w '%{http_code}' http://localhost/) -eq 200
+    test $(curl -s -o /dev/null -w '%{http_code}' http://localhost/designmaps/rtgm/) -eq 200
 
 # this is set in usgs/httpd-php:latest, and repeated here for clarity
 EXPOSE 80
