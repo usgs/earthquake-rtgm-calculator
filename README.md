@@ -1,3 +1,6 @@
+**ARCHIVED**
+Please see https://code.usgs.gov/ghsc/hazdev/earthquake-rtgm-calculator
+
 Risk-Targeted Ground Motion Calculator
 ======================================
 
